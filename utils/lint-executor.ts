@@ -17,7 +17,7 @@ export class LintExecutor {
    */
   public async execute(id: string, element: HTMLElement): Promise<Range[]> {
     try {
-      const results = await this.textlint.lint(id, element.innerHTML);
+      const results = await this.textlint.lint(id, element.innerText);
       return this.createRangesFromResults(element, results);
     } catch (error) {
       console.error(`[LintExecutor] Lint failed for element ${id}:`, error);
