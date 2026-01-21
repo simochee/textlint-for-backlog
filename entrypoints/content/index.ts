@@ -20,7 +20,7 @@ export default defineContentScript({
 
     await textlint.load();
 
-    observeQuerySelector('[contenteditable="true"] > p', async (el) => {
+    observeQuerySelector('[contenteditable="true"] > p', (el) => {
       const id = crypto.randomUUID();
 
       const lint = async () => {
@@ -38,7 +38,7 @@ export default defineContentScript({
         renderRange();
       };
 
-      await lint();
+      void lint();
 
       let beforeText = el.innerText;
 
@@ -54,6 +54,12 @@ export default defineContentScript({
         subtree: true,
         characterData: true,
       });
+
+      return () => {
+        observer.disconnect();
+        rangesMap.delete(id);
+        renderRange();
+      };
     });
   },
 });
