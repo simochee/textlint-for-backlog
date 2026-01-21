@@ -4,10 +4,8 @@ pre-commit:
       glob: "*"
       stage_fixed: true
       run: |-
-        npx prettier --write --ignore-unknown {staged_files}
-
-    sort-package-json:
-      glob: package.json
-      stage_fixed: true
-      run: |-
-        npx sort-package-json
+        npx prettier \
+          --write \
+          --ignore-unknown \
+          --plugin=prettier-plugin-packagejson \
+          {staged_files}
