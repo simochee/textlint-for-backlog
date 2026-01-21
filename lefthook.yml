@@ -1,14 +1,15 @@
 pre-commit:
   commands:
-    oxlint:
+    biome:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: bun run fix:oxlint {staged_files}
       stage_fixed: true
-
-    oxfmt:
-      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: bun run fix:oxfmt {staged_files}
-      stage_fixed: true
+      run: |-
+        npx biome check \
+          --write \
+          --unsafe \
+          --no-errors-on-unmatched \
+          --files-ignore-unknown=true \
+          {staged_files}
 
     sort-package-json:
       glob: package.json

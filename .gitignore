@@ -1,6 +1,7 @@
 .wxt
 .output
 node_modules
+__textlint_compier_temp
 .DS_Store
 *.local*
 *.log
