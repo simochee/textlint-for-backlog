@@ -1,7 +1,8 @@
 import { observeQuerySelector } from "@/utils/observe-query-selector";
-import { createRangeFromTextOffset } from "@/utils/create-range-from-text-offset";
 import { TextlintWorker } from "./worker";
-import debounce from "debounce";
+import { HighlightManager } from "@/utils/highlight-manager";
+import { LintExecutor } from "@/utils/lint-executor";
+import { ElementWatcher } from "@/utils/element-watcher";
 import "./style.css";
 
 export default defineContentScript({
@@ -11,54 +12,26 @@ export default defineContentScript({
     const { textlintWorkerUrl } = useAppConfig();
     const textlint = new TextlintWorker(textlintWorkerUrl);
 
-    const rangesMap = new Map<string, Range[]>();
-
-    const renderRange = debounce(() => {
-      const highlight = new Highlight(...[...rangesMap.values()].flat());
-      CSS.highlights.set("textlint-error", highlight);
-    }, 100);
-
     await textlint.load();
 
+    // ハイライト管理とLint実行のインスタンスを作成
+    const highlightManager = new HighlightManager("textlint-error", 100);
+    const lintExecutor = new LintExecutor(textlint);
+
+    // 要素の監視を開始
     observeQuerySelector('[contenteditable="true"] > p', (el) => {
       const id = crypto.randomUUID();
+      const watcher = new ElementWatcher(
+        el,
+        id,
+        lintExecutor,
+        highlightManager,
+      );
 
-      const lint = async () => {
-        const results = await textlint.lint(id, el.innerHTML);
-
-        const ranges = results.map((result) => {
-          return createRangeFromTextOffset(
-            el,
-            result.range[0],
-            result.range[1],
-          );
-        });
-
-        rangesMap.set(id, ranges);
-        renderRange();
-      };
-
-      void lint();
-
-      let beforeText = el.innerText;
-
-      const observer = new MutationObserver(async () => {
-        if (beforeText !== el.innerText) {
-          beforeText = el.innerText;
-          await lint();
-        }
-      });
-
-      observer.observe(el, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-      });
+      watcher.start();
 
       return () => {
-        observer.disconnect();
-        rangesMap.delete(id);
-        renderRange();
+        watcher.stop();
       };
     });
   },

@@ -1,35 +1,6 @@
 import * as v from "valibot";
-
-const LintResultMessage = v.object({
-  column: v.number(),
-  index: v.number(),
-  line: v.number(),
-  loc: v.object({
-    start: v.object({
-      line: v.number(),
-      column: v.number(),
-    }),
-    end: v.object({
-      line: v.number(),
-      column: v.number(),
-    }),
-  }),
-  message: v.string(),
-  range: v.tuple([v.number(), v.number()]),
-  ruleId: v.string(),
-  severity: v.number(),
-});
-
-type LintResultMessage = v.InferOutput<typeof LintResultMessage>;
-
-const MessageData = v.object({
-  command: v.literal("lint:result"),
-  id: v.string(),
-  result: v.object({
-    filePath: v.string(),
-    messages: v.array(LintResultMessage),
-  }),
-});
+import type { LintResultMessage } from "@/types/textlint";
+import { MessageDataSchema } from "@/types/textlint";
 export class TextlintWorker {
   private _worker: Worker | undefined;
 
@@ -52,7 +23,10 @@ export class TextlintWorker {
 
     this.worker.onmessage = async (event) => {
       try {
-        const { id, result } = await v.parseAsync(MessageData, event.data);
+        const { id, result } = await v.parseAsync(
+          MessageDataSchema,
+          event.data,
+        );
 
         this._listeners.get(id)?.(result.messages);
       } catch {
