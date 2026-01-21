@@ -1,5 +1,35 @@
 {
   "rules": {
-    "preset-ja-technical-writing": true
+    "preset-ja-technical-writing": true,
+    "preset-ja-spacing": true,
+    "preset-jtf-style": {
+      "1.1.3.箇条書き": false,
+      "3.1.1.全角文字と半角文字の間": false,
+      "4.3.1.丸かっこ()": false
+    },
+    "no-dropping-the-ra": true,
+    "no-doubled-joshi": {
+      "strict": false,
+      "allow": ["も", "や", "か"],
+      "separatorCharacters": ["、", "。", ":", ";", "「", "」"]
+    },
+    "no-double-negative-ja": true,
+    "no-mix-dearu-desumasu": {
+      "preferInHeader": "",
+      "preferInBody": "ですます",
+      "preferInList": "である",
+      "strict": false
+    },
+    "ja-no-weak-phrase": true,
+    "ja-no-successive-word": true,
+    "ja-no-redundant-expression": true,
+    "ja-no-abusage": true,
+    "max-ten": {
+      "max": 3
+    },
+    "sentence-length": {
+      "max": 150
+    },
+    "no-nfd": true
   }
 }
