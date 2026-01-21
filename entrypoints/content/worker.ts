@@ -88,7 +88,7 @@ export class TextlintWorker {
       id,
       command: "lint",
       text,
-      ext: ".md",
+      ext: ".txt",
     });
 
     return await promise;

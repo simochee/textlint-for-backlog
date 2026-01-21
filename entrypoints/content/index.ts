@@ -1,5 +1,7 @@
 import { observeQuerySelector } from "@/utils/observe-query-selector";
+import { createRangeFromTextOffset } from "@/utils/create-range-from-text-offset";
 import { TextlintWorker } from "./worker";
+import debounce from "debounce";
 import "./style.css";
 
 export default defineContentScript({
@@ -9,24 +11,31 @@ export default defineContentScript({
     const { textlintWorkerUrl } = useAppConfig();
     const textlint = new TextlintWorker(textlintWorkerUrl);
 
+    const rangesMap = new Map<string, Range[]>();
+
+    const renderRange = debounce(() => {
+      const highlight = new Highlight(...[...rangesMap.values()].flat());
+      CSS.highlights.set("textlint-error", highlight);
+    }, 100);
+
     await textlint.load();
 
-    observeQuerySelector('[contenteditable="true"] p', async (el) => {
+    observeQuerySelector('[contenteditable="true"] > p', async (el) => {
       const id = crypto.randomUUID();
 
       const lint = async () => {
-        const results = await textlint.lint(id, el.innerText);
+        const results = await textlint.lint(id, el.innerHTML);
 
         const ranges = results.map((result) => {
-          const range = new Range();
-          range.setStart(el.firstChild ?? el, result.range[0]);
-          range.setEnd(el.firstChild ?? el, result.range[1]);
-
-          return range;
+          return createRangeFromTextOffset(
+            el,
+            result.range[0],
+            result.range[1],
+          );
         });
 
-        const highlight = new Highlight(...ranges);
-        CSS.highlights.set("textlint-error", highlight);
+        rangesMap.set(id, ranges);
+        renderRange();
       };
 
       await lint();
