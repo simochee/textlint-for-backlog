@@ -1,0 +1,5 @@
+{
+  "extends": ["./.wxt/tsconfig.json", "@tsconfig/vite-react"],
+  "include": ["entrypoints"],
+  "exclude": ["node_modules", ".output"]
+}
