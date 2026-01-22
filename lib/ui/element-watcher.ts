@@ -1,6 +1,6 @@
-import type { LintExecutor } from "./lint-executor";
+import type { LintExecutor } from "@/features/textlint/executor";
 import type { HighlightManager } from "./highlight-manager";
-import type { ErrorIconManager } from "./error-icon-manager";
+import type { ErrorIconManager } from "./error-icon/manager";
 
 /**
  * 要素の変更を監視し、テキスト変更時にlintを実行するクラス

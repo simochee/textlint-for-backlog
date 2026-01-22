@@ -4,7 +4,7 @@ import {
   DEFAULT_PRESET_SETTINGS,
   type PresetSettings as PresetSettingsType,
   type PresetName,
-} from "@/types/presets";
+} from "./types";
 
 const STORAGE_KEY = "textlint-preset-settings";
 

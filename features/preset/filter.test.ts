@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { filterMessages } from "./preset-filter";
-import { PresetSettingsManager } from "./preset-settings";
-import { PRESETS } from "@/types/presets";
-import type { LintResultMessage } from "@/types/textlint";
+import { filterMessages } from "./filter";
+import { PresetSettingsManager } from "./settings";
+import { PRESETS } from "./types";
+import type { LintResultMessage } from "@/features/textlint/types";
 
 describe("filterMessages", () => {
   let mockGetCurrent: ReturnType<typeof vi.fn>;

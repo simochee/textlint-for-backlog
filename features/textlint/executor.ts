@@ -1,6 +1,6 @@
-import type { TextlintWorker } from "@/entrypoints/content/worker";
-import type { LintResultMessage } from "@/types/textlint";
-import { createRangeFromTextOffset } from "./create-range-from-text-offset";
+import type { TextlintWorker } from "./worker";
+import type { LintResultMessage } from "./types";
+import { createRangeFromTextOffset } from "@/lib/dom/create-range-from-text-offset";
 
 /**
  * Lint結果

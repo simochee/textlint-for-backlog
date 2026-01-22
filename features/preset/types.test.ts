@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractPresetName, PRESETS } from "./presets";
+import { extractPresetName, PRESETS } from "./types";
 
 describe("extractPresetName", () => {
   it("正しいruleIdからプリセット名を抽出する", () => {

@@ -1,6 +1,6 @@
 import "./style.css";
-import { PresetSettingsManager } from "@/utils/preset-settings";
-import { PRESETS, PRESET_LABELS } from "@/types/presets";
+import { PresetSettingsManager } from "@/features/preset/settings";
+import { PRESETS, PRESET_LABELS } from "@/features/preset/types";
 
 const settingsManager = PresetSettingsManager.getInstance();
 

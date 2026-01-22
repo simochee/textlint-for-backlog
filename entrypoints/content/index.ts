@@ -1,10 +1,10 @@
-import { observeQuerySelector } from "@/utils/observe-query-selector";
-import { TextlintWorker } from "./worker";
-import { HighlightManager } from "@/utils/highlight-manager";
-import { LintExecutor } from "@/utils/lint-executor";
-import { ElementWatcher } from "@/utils/element-watcher";
-import { ErrorIconManager } from "@/utils/error-icon-manager";
-import { PresetSettingsManager } from "@/utils/preset-settings";
+import { observeQuerySelector } from "@/lib/dom/observe-query-selector";
+import { TextlintWorker } from "@/features/textlint/worker";
+import { HighlightManager } from "@/lib/ui/highlight-manager";
+import { LintExecutor } from "@/features/textlint/executor";
+import { ElementWatcher } from "@/lib/ui/element-watcher";
+import { ErrorIconManager } from "@/lib/ui/error-icon/manager";
+import { PresetSettingsManager } from "@/features/preset/settings";
 import "./global.css";
 
 export default defineContentScript({

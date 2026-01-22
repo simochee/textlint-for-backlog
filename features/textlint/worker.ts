@@ -1,7 +1,7 @@
 import * as v from "valibot";
-import type { LintResultMessage } from "@/types/textlint";
-import { MessageDataSchema } from "@/types/textlint";
-import { filterMessages } from "@/utils/preset-filter";
+import type { LintResultMessage } from "./types";
+import { MessageDataSchema } from "./types";
+import { filterMessages } from "@/features/preset/filter";
 
 export class TextlintWorker {
   private _worker: Worker | undefined;

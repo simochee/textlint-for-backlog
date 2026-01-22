@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { PresetSettingsManager } from "./preset-settings";
-import { DEFAULT_PRESET_SETTINGS, PRESETS } from "@/types/presets";
+import { PresetSettingsManager } from "./settings";
+import { DEFAULT_PRESET_SETTINGS, PRESETS } from "./types";
 
 describe("PresetSettingsManager", () => {
   let manager: PresetSettingsManager;

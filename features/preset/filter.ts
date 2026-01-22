@@ -1,6 +1,6 @@
-import type { LintResultMessage } from "@/types/textlint";
-import { extractPresetName } from "@/types/presets";
-import { PresetSettingsManager } from "./preset-settings";
+import type { LintResultMessage } from "@/features/textlint/types";
+import { extractPresetName } from "./types";
+import { PresetSettingsManager } from "./settings";
 
 /**
  * プリセット設定に基づいてlint結果をフィルタリングする関数
