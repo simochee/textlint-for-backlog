@@ -334,11 +334,15 @@ export class ErrorIconManager {
 
     const content = errors
       .map(
-        (error, index) => `
+        (error) => `
         <div class="${styles.errorItem}">
           <div class="${styles.errorHeader}">
-            <span class="${styles.errorNumber}">${index + 1}</span>
-            <span class="${styles.errorRule}">${error.ruleId}</span>
+            <a href="http://localhost/rules/${error.ruleId}" class="${styles.errorRule}" target="_blank" rel="noopener noreferrer">
+              ${error.ruleId}
+              <svg class="${styles.linkIcon}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 9v5H2V2h5M9 2h5v5M8 8l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
           <div class="${styles.errorMessage}">${error.message}</div>
         </div>
@@ -346,14 +350,7 @@ export class ErrorIconManager {
       )
       .join("");
 
-    popover.innerHTML = `
-      <div class="${styles.popoverHeader}">
-        <span class="${styles.errorCount}">${errors.length}件のエラー</span>
-      </div>
-      <div class="${styles.errorList}">
-        ${content}
-      </div>
-    `;
+    popover.innerHTML = content;
 
     return popover;
   }
