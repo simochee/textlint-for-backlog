@@ -9,6 +9,7 @@ export class ErrorIconManager {
   private errors = new WeakMap<Element, LintResultMessage[]>(); // エラー情報を保存
   private popovers = new WeakMap<Element, HTMLElement>(); // Popover要素を保存
   private elements = new Set<Element>(); // アクティブな要素を追跡
+  private openElements = new Set<Element>(); // ツールチップが開いている要素を追跡
   private container: HTMLElement | null = null;
   private resizeObserver: ResizeObserver;
   private scrollHandler: () => void;
@@ -240,7 +241,7 @@ export class ErrorIconManager {
       const popover = this.popovers.get(element);
       const icon = this.icons.get(element);
       if (popover && icon && popover.style.opacity !== "0") {
-        this.updatePopoverPosition(popover, icon);
+        this.updatePopoverPosition(popover, icon, element);
       }
     });
   }
@@ -256,12 +257,14 @@ export class ErrorIconManager {
     let popover = this.popovers.get(element);
     if (popover) {
       if (popover.style.opacity === "0") {
-        this.updatePopoverPosition(popover, icon);
+        this.updatePopoverPosition(popover, icon, element);
         popover.style.opacity = "1";
         popover.style.pointerEvents = "auto";
+        this.setActiveHighlight(element, true);
       } else {
         popover.style.opacity = "0";
         popover.style.pointerEvents = "none";
+        this.setActiveHighlight(element, false);
       }
       return;
     }
@@ -272,9 +275,10 @@ export class ErrorIconManager {
 
     // ツールチップはbodyに直接追加して独立したz-indexを持たせる
     document.body.appendChild(popover);
-    this.updatePopoverPosition(popover, icon);
+    this.updatePopoverPosition(popover, icon, element);
     popover.style.opacity = "1";
     popover.style.pointerEvents = "auto";
+    this.setActiveHighlight(element, true);
   }
 
   /**
@@ -294,9 +298,29 @@ export class ErrorIconManager {
         if (!popover.contains(target) && icon && !icon.contains(target)) {
           popover.style.opacity = "0";
           popover.style.pointerEvents = "none";
+          this.setActiveHighlight(element, false);
         }
       }
     });
+  }
+
+  /**
+   * 要素全体のアクティブハイライトを設定/解除
+   */
+  private setActiveHighlight(element: Element, active: boolean): void {
+    if (active) {
+      // 要素全体をハイライト
+      const range = document.createRange();
+      range.selectNodeContents(element);
+
+      const highlight = new Highlight(range);
+      CSS.highlights.set("textlint-error-active", highlight);
+      this.openElements.add(element);
+    } else {
+      // ハイライトを削除
+      CSS.highlights.delete("textlint-error-active");
+      this.openElements.delete(element);
+    }
   }
 
   /**
@@ -337,11 +361,16 @@ export class ErrorIconManager {
   /**
    * Popoverの位置をアイコンの位置に基づいて更新
    */
-  private updatePopoverPosition(popover: HTMLElement, icon: HTMLElement): void {
+  private updatePopoverPosition(
+    popover: HTMLElement,
+    icon: HTMLElement,
+    element: Element,
+  ): void {
     // アイコンが非表示の場合はツールチップも非表示
     if (icon.style.opacity === "0" || icon.style.display === "none") {
       popover.style.opacity = "0";
       popover.style.pointerEvents = "none";
+      this.setActiveHighlight(element, false);
       return;
     }
 
