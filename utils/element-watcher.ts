@@ -73,11 +73,11 @@ export class ElementWatcher {
     );
     this.highlightManager.setRanges(this.id, ranges);
 
-    // エラーがある場合はアイコンを表示、ない場合は非表示
+    // エラーがある場合はアイコンを表示、ない場合は削除
     if (ranges.length > 0) {
       this.errorIconManager.showIcon(this.element, messages);
     } else {
-      this.errorIconManager.hideIcon(this.element);
+      this.errorIconManager.removeIcon(this.element);
     }
   }
 }
