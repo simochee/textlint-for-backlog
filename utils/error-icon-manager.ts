@@ -374,7 +374,7 @@ export class ErrorIconManager {
 
       const errorMessage = document.createElement("div");
       errorMessage.className = styles.errorMessage;
-      errorMessage.textContent = error.message;
+      this.setMessageWithLinks(errorMessage, error.message);
 
       errorItem.appendChild(errorHeader);
       errorItem.appendChild(errorMessage);
@@ -409,6 +409,32 @@ export class ErrorIconManager {
    */
   private clearFocusHighlight(): void {
     CSS.highlights.delete("textlint-error-focus");
+  }
+
+  /**
+   * メッセージ内のURLをリンクに変換して要素に設定
+   */
+  private setMessageWithLinks(element: HTMLElement, message: string): void {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    const parts = message.split(urlPattern);
+
+    parts.forEach((part, index) => {
+      if (index % 2 === 0) {
+        // 通常のテキスト
+        if (part) {
+          element.appendChild(document.createTextNode(part));
+        }
+      } else {
+        // URL
+        const link = document.createElement("a");
+        link.href = part;
+        link.textContent = part;
+        link.className = styles.errorLink;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        element.appendChild(link);
+      }
+    });
   }
 
   /**

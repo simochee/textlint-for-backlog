@@ -67,15 +67,16 @@
 
 .errorItem {
   padding: 8px;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 8px;
+  border-radius: 4px;
 }
 
 .errorItem:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .errorItem:hover {
-  background: #f8f9fa;
+  background: var(--defaultColorBase);
 }
 
 .errorHeader {
@@ -87,10 +88,7 @@
 
 .errorRule {
   font-size: 12px;
-  color: #666;
-  font-family:
-    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
-    monospace;
+  color: var(--textColorWeak);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -98,7 +96,7 @@
 }
 
 .errorRule:hover {
-  color: #333;
+  color: var(--textColorDefault);
 }
 
 .linkIcon {
@@ -115,5 +113,14 @@
 .errorMessage {
   font-size: 13px;
   line-height: 1.5;
-  color: #333;
+  color: var(--textColorDefault);
+}
+
+.errorLink {
+  color: var(--defaultColorLink);
+  text-decoration: underline;
+}
+
+.errorLink:hover {
+  text-decoration: none;
 }
