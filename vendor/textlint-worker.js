@@ -1,4 +1,4 @@
-/*! textlinteditor:@@@ {"name":"","namespace":"http://localhost:3000","homepage":"http://localhost:3000","version":"1.0.0","config":{"rules":{"preset-ja-technical-writing":true,"preset-ja-spacing":true,"preset-japanese":true,"@textlint-ja/preset-ai-writing":true},"plugins":{"@textlint/text":true,"@textlint/markdown":true}}} @@@ */ (() => {
+/*! textlinteditor:@@@ {"name":"","namespace":"http://localhost:3000","homepage":"http://localhost:3000","version":"1.0.0","config":{"rules":{"preset-ja-technical-writing":true,"preset-ja-spacing":true,"preset-japanese":true},"plugins":{"@textlint/text":true,"@textlint/markdown":true}}} @@@ */ (() => {
   var e = {
       35(e, t, n) {
         "use strict";
@@ -3505,94 +3505,6 @@
                 : e(i.resolve(t, "../"), n);
           }));
       },
-      7504(e, t, n) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.default = void 0));
-        var r = n(92222);
-        t.default = (e, t = {}) => {
-          const {
-              Syntax: n,
-              RuleError: i,
-              report: s,
-              getSource: o,
-              locator: a,
-            } = e,
-            u = t.allows ?? [],
-            c = t.disableBoldListItems ?? !1,
-            l = t.disableEmojiListItems ?? !1,
-            p = [
-              "✅",
-              "❌",
-              "⭐",
-              "✨",
-              "💯",
-              "⚠️",
-              "❗",
-              "❓",
-              "💥",
-              "🔥",
-              "⚡",
-              "💪",
-              "🚀",
-              "💡",
-              "🤔",
-              "💭",
-              "🧠",
-              "🎯",
-              "📈",
-              "📊",
-              "🏆",
-              "👍",
-              "👎",
-              "😊",
-              "😎",
-              "🎉",
-              "🌟",
-              "📝",
-              "📋",
-              "✏️",
-              "🖊️",
-              "💼",
-            ].map((e) => e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-            h = new RegExp(`(${p.join("|")})`);
-          return {
-            [n.ListItem](e) {
-              const t = o(e);
-              if (u.length > 0) {
-                if ((0, r.matchPatterns)(t, u).length > 0) return;
-              }
-              if (!c) {
-                const n = /^[\s]*[-*+]\s+\*\*([^*]+)\*\*\s*([:：])/,
-                  r = t.match(n);
-                if (r) {
-                  const t = r.index ?? 0,
-                    n = [t, t + r[0].length],
-                    o = r[2],
-                    u = new i(
-                      `リストアイテムで強調（**）とコロン（${o}）の組み合わせは機械的な印象を与える可能性があります。より自然な表現を検討してください。`,
-                      { padding: a.range(n) },
-                    );
-                  s(e, u);
-                }
-              }
-              if (!l) {
-                const n = t.match(h);
-                if (n) {
-                  const t = n[0],
-                    r = n.index ?? 0,
-                    o = [r, r + t.length],
-                    u = new i(
-                      `リストアイテムでの絵文字「${t}」の使用は、読み手によっては機械的な印象を与える場合があります。テキストベースの表現も検討してみてください。`,
-                      { padding: a.range(o) },
-                    );
-                  s(e, u);
-                }
-              }
-            },
-          };
-        };
-      },
       7539(e, t, n) {
         "use strict";
         (Object.defineProperty(t, "__esModule", { value: !0 }),
@@ -6080,17 +5992,17 @@
                   (this.local = e));
               };
               t.ImportDefaultSpecifier = H;
-              var $ = function (e) {
+              var z = function (e) {
                 ((this.type = r.Syntax.ImportNamespaceSpecifier),
                   (this.local = e));
               };
-              t.ImportNamespaceSpecifier = $;
-              var z = function (e, t) {
+              t.ImportNamespaceSpecifier = z;
+              var $ = function (e, t) {
                 ((this.type = r.Syntax.ImportSpecifier),
                   (this.local = e),
                   (this.imported = t));
               };
-              t.ImportSpecifier = z;
+              t.ImportSpecifier = $;
               var K = function (e, t) {
                 ((this.type = r.Syntax.LabeledStatement),
                   (this.label = e),
@@ -11561,263 +11473,6 @@
           );
         };
       },
-      12494(e, t, n) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.default = void 0));
-        var r = n(92222),
-          i = n(38663);
-        t.default = (e, t = {}) => {
-          const { Syntax: n, report: s, locator: o } = e,
-            a = t.allows ?? [],
-            u = t.disableRedundancyGuidance ?? !1,
-            c = t.disableVoiceGuidance ?? !1,
-            l = t.disableConsistencyGuidance ?? !1,
-            p = t.disableClarityGuidance ?? !1,
-            h = t.disableStructureGuidance ?? !1,
-            d = t.enableDocumentAnalysis ?? !0,
-            f = [
-              {
-                pattern: /まず最初に/g,
-                message:
-                  "【簡潔性】冗長表現が検出されました。「まず最初に」→「まず」または「最初に」への簡潔化を検討してください。",
-                category: "redundancy",
-              },
-              {
-                pattern: /あらかじめ予測/g,
-                message:
-                  "【簡潔性】冗長表現が検出されました。「あらかじめ予測」→「予測」への簡潔化を検討してください。",
-                category: "redundancy",
-              },
-              {
-                pattern: /することができます/g,
-                message:
-                  "【簡潔性】冗長な助動詞表現が検出されました。「できます」または「します」への簡潔化を検討してください。",
-                category: "redundancy",
-              },
-              {
-                pattern: /する必要があります/g,
-                message:
-                  "【簡潔性】冗長な義務表現が検出されました。「してください」または「します」への直接的な表現を検討してください。",
-                category: "redundancy",
-              },
-              {
-                pattern: /言うまでもなく/g,
-                message:
-                  "【簡潔性】不要な前置き表現が検出されました。核心から始める簡潔な文章構成を検討してください。",
-                category: "redundancy",
-              },
-            ],
-            m = [
-              {
-                pattern: /が行われ(て|る|ます)/g,
-                message:
-                  "【明確性】受動的で抽象的な表現が検出されました。具体的な動詞を使った能動態への変更を検討してください（例：「実行する」「処理する」）。",
-                category: "voice",
-              },
-              {
-                pattern: /の変更を行/g,
-                message:
-                  "【明確性】名詞化された表現が検出されました。「を変更する」のような直接的な動詞表現を検討してください。",
-                category: "voice",
-              },
-              {
-                pattern: /の実装を実施/g,
-                message:
-                  "【明確性】二重の名詞化表現が検出されました。「を実装する」への簡潔化を検討してください。",
-                category: "voice",
-              },
-              {
-                pattern: /によって[実行処理実施]され/g,
-                message:
-                  "【明確性】受動態表現が検出されました。「○○が△△を実行する」のような能動態への変更を検討してください。",
-                category: "voice",
-              },
-              {
-                pattern: /がシステムによって実行される/g,
-                message:
-                  "【明確性】受動態表現が検出されました。「システムが○○を実行する」のような能動態への変更を検討してください。",
-                category: "voice",
-              },
-              {
-                pattern: /によって実行され/g,
-                message:
-                  "【明確性】受動態表現が検出されました。「システムが○○を実行する」のような能動態への変更を検討してください。",
-                category: "voice",
-              },
-            ],
-            g = [
-              {
-                pattern: /高速な(?:パフォーマンス|処理|動作)/g,
-                message:
-                  "【具体性】抽象的な性能表現が検出されました。具体的な数値基準の提示を検討してください（例：「50ms未満の応答時間」）。",
-                category: "clarity",
-              },
-              {
-                pattern: /大幅に(?:向上|改善|削減)/g,
-                message:
-                  "【具体性】定量化されていない変化表現が検出されました。具体的な数値や割合の提示を検討してください。",
-                category: "clarity",
-              },
-              {
-                pattern: /効率的な/g,
-                message:
-                  "【具体性】抽象的な評価表現が検出されました。何に対してどのように効率的なのか、具体的な説明を検討してください。",
-                category: "clarity",
-              },
-              {
-                pattern: /適切な/g,
-                message:
-                  "【具体性】曖昧な判断表現が検出されました。何を基準として適切なのか、具体的な条件や基準の明示を検討してください。",
-                category: "clarity",
-              },
-              {
-                pattern: /必要に応じて/g,
-                message:
-                  "【具体性】曖昧な条件表現が検出されました。どのような状況で必要なのか、具体的な判断基準の明示を検討してください。",
-                category: "clarity",
-              },
-            ],
-            y = [
-              {
-                pattern:
-                  /(ユーザー.*?(?:クライアント|顧客))|(?:(?:クライアント|顧客).*?ユーザー)/g,
-                message:
-                  "【一貫性】同一対象を指す用語の混在が検出されました。文書全体で統一した用語の使用を検討してください。",
-                category: "consistency",
-              },
-              {
-                pattern:
-                  /(設定画面.*?(?:設定ページ|環境設定))|(?:(?:設定ページ|環境設定).*?設定画面)/g,
-                message:
-                  "【一貫性】機能名称の表記揺れが検出されました。プロジェクト内で統一した名称の使用を検討してください。",
-                category: "consistency",
-              },
-              {
-                pattern: /(です。.*?である。)|(である。.*?です。)/g,
-                message:
-                  "【一貫性】文体の混在が検出されました。「です・ます調」または「だ・である調」への統一を検討してください。",
-                category: "consistency",
-              },
-            ],
-            x = [
-              {
-                pattern: /また、.*?また、/g,
-                message:
-                  "【構造化】接続表現の重複が検出されました。箇条書きや段落分けによる情報整理を検討してください。",
-                category: "structure",
-              },
-              {
-                pattern:
-                  /(?:第一に|まず).*?(?:第二に|次に).*?(?:第三に|最後に)/g,
-                message:
-                  "【構造化】連続的な手順説明が検出されました。番号付きリストまたは見出し構造での整理を検討してください。",
-                category: "structure",
-              },
-            ];
-          let E = !1;
-          const v = {
-              redundancy: 0,
-              voice: 0,
-              clarity: 0,
-              consistency: 0,
-              structure: 0,
-            },
-            D = (e) => {
-              h ||
-                ((e) => {
-                  const t = e.children || [];
-                  for (let e = 0; e < t.length - 1; e++) {
-                    const n = t[e],
-                      o = t[e + 1];
-                    if ("Paragraph" === n.type && "List" === o.type) {
-                      const e = new i.StringSource(n, {
-                          replacer({ node: e, emptyValue: t }) {
-                            if ("Code" === e.type || "InlineCode" === e.type)
-                              return t();
-                          },
-                        }),
-                        t = e.toString();
-                      let o = !1,
-                        u = "";
-                      const c =
-                        /(?:例えば|具体的には|詳細には|以下|次に|また)。[\s]*$/;
-                      if (
-                        (t.trim().match(c) &&
-                          ((o = !0),
-                          (u =
-                            "【構造化】接続表現と句点で終わる文の直後の箇条書きは機械的な印象を与える可能性があります。「たとえば、次のような点があります。」のような自然な導入文を検討してください。")),
-                        o)
-                      ) {
-                        if (
-                          a.length > 0 &&
-                          (0, r.matchPatterns)(t, a).length > 0
-                        )
-                          continue;
-                        (v.structure++, (E = !0), s(n, { message: u }));
-                      }
-                    }
-                  }
-                })(e);
-            };
-          return {
-            [n.Document](e) {
-              D(e);
-            },
-            [n.Paragraph](e) {
-              ((e) => {
-                const t = new i.StringSource(e, {
-                    replacer({ node: e, emptyValue: t }) {
-                      if ("Code" === e.type || "InlineCode" === e.type)
-                        return t();
-                    },
-                  }),
-                  n = t.toString();
-                if (a.length > 0 && (0, r.matchPatterns)(n, a).length > 0)
-                  return;
-                const d = [
-                  ...(u ? [] : f),
-                  ...(c ? [] : m),
-                  ...(p ? [] : g),
-                  ...(l ? [] : y),
-                  ...(h ? [] : x),
-                ];
-                for (const { pattern: r, message: i, category: a } of d) {
-                  const u = n.matchAll(r);
-                  for (const n of u) {
-                    const r = n.index ?? 0,
-                      u = t.originalIndexFromIndex(r),
-                      c = t.originalIndexFromIndex(r + n[0].length);
-                    if ("number" == typeof u && "number" == typeof c) {
-                      const t = [u, c];
-                      (v[a]++,
-                        (E = !0),
-                        s(e, { message: i, padding: o.range(t) }));
-                    }
-                  }
-                }
-              })(e);
-            },
-            [n.DocumentExit](e) {
-              ((e) => {
-                if (d && E) {
-                  const t = Object.values(v).reduce((e, t) => e + t, 0),
-                    n = [];
-                  (v.redundancy > 0 && n.push(`簡潔性: ${v.redundancy}件`),
-                    v.voice > 0 && n.push(`明確性: ${v.voice}件`),
-                    v.clarity > 0 && n.push(`具体性: ${v.clarity}件`),
-                    v.consistency > 0 && n.push(`一貫性: ${v.consistency}件`),
-                    v.structure > 0 && n.push(`構造化: ${v.structure}件`));
-                  const r = n.length > 0 ? ` [内訳: ${n.join(", ")}]` : "";
-                  s(e, {
-                    message: `【テクニカルライティング品質分析】この文書で${t}件の改善提案が見つかりました${r}。効果的なテクニカルライティングの7つのC（Clear, Concise, Correct, Coherent, Concrete, Complete, Courteous）の原則に基づいて見直しを検討してください。詳細なガイドライン: https://github.com/textlint-ja/textlint-rule-preset-ai-writing/blob/main/docs/tech-writing-guidelines.md`,
-                  });
-                }
-              })(e);
-            },
-          };
-        };
-      },
       12790(e, t, n) {
         "use strict";
         (Object.defineProperty(t, "__esModule", { value: !0 }),
@@ -11925,7 +11580,7 @@
                     codeFencedFenceMeta: S,
                     codeFlowValue: B,
                     codeIndented: v(_),
-                    codeText: v(z),
+                    codeText: v($),
                     codeTextData: B,
                     data: B,
                     definition: v(),
@@ -11937,7 +11592,7 @@
                     hardBreakTrailing: v(U),
                     htmlFlow: v(H),
                     htmlFlowData: B,
-                    htmlText: v($),
+                    htmlText: v(z),
                     htmlTextData: B,
                     image: v(G),
                     label: V,
@@ -12242,11 +11897,11 @@
               var e = this.resume();
               this.stack[this.stack.length - 1].value = e;
             }
-            function $() {
+            function z() {
               var e = this.resume();
               this.stack[this.stack.length - 1].value = e;
             }
-            function z() {
+            function $() {
               var e = this.resume();
               this.stack[this.stack.length - 1].value = e;
             }
@@ -15325,94 +14980,6 @@
           d = { linter: h, fixer: h };
         t.default = d;
       },
-      21067(e, t, n) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.default = void 0));
-        var r = n(92222),
-          i = n(94619),
-          s = n(38663);
-        t.default = (e, t = {}) => {
-          const {
-              Syntax: n,
-              RuleError: o,
-              report: a,
-              getSource: u,
-              locator: c,
-            } = e,
-            l = t.allows ?? [],
-            p = t.disableCodeBlock ?? !1,
-            h = t.disableList ?? !1,
-            d = t.disableQuote ?? !1,
-            f = t.disableTable ?? !1,
-            m = async (e, t) => {
-              const m = u(e);
-              if (l.length > 0) {
-                if ((0, r.matchPatterns)(m, l).length > 0) return;
-              }
-              if (!/[：:]$/.test(m.trim())) return;
-              const g = new s.StringSource(e).toString().trim();
-              if (!/[：:]$/.test(g)) return;
-              const y = g.endsWith("：") ? "：" : ":",
-                x = g.slice(0, -1);
-              if (
-                await (async () => {
-                  if (
-                    /^[a-zA-Z0-9\s\-_.]+$/.test(x.trim()) &&
-                    /[a-zA-Z]/.test(x)
-                  )
-                    return !0;
-                  if (x.length <= 2) return !0;
-                  try {
-                    const e = await (0, i.tokenize)(x);
-                    if (0 === e.length) return !0;
-                    const t = e[e.length - 1].pos.split(",")[0];
-                    return (
-                      "名詞" === t ||
-                      (["動詞", "形容詞", "助動詞"].includes(t), !1)
-                    );
-                  } catch (e) {
-                    return !0;
-                  }
-                })()
-              )
-                return;
-              if (
-                (() => {
-                  if (!t) return !1;
-                  switch (t.type) {
-                    case n.CodeBlock:
-                      return !p;
-                    case n.List:
-                      return !h;
-                    case n.BlockQuote:
-                      return !d;
-                    case n.Table:
-                      return !f;
-                    default:
-                      return !1;
-                  }
-                })()
-              ) {
-                const t = m.lastIndexOf(y),
-                  n = [t, t + 1],
-                  r = new o(
-                    `「${x}${y}」のような述語とコロンで終わるパターンは、読み手によっては英語の構文を直訳したような印象を与える場合があります。「次のように〜します。」のような自然な日本語表現を検討してください。`,
-                    { padding: c.range(n) },
-                  );
-                a(e, r);
-              }
-            };
-          return {
-            async [n.Document](e) {
-              for (const [t, r] of e.children.entries()) {
-                const i = e.children[t + 1];
-                r.type === n.Paragraph && (await m(r, i));
-              }
-            },
-          };
-        };
-      },
       21154(e) {
         "use strict";
         e.exports = function (e, t, n) {
@@ -16163,7 +15730,7 @@
             N
           );
         }
-        const $ = {
+        const z = {
           bracketL: U("[", { beforeExpr: A, startsExpr: C }),
           bracketHashL: U("#[", { beforeExpr: A, startsExpr: C }),
           bracketBarL: U("[|", { beforeExpr: A, startsExpr: C }),
@@ -16315,7 +15882,7 @@
           jsxTagStart: U("jsxTagStart", { startsExpr: C }),
           jsxTagEnd: U("jsxTagEnd"),
         };
-        function z(e) {
+        function $(e) {
           return e >= 93 && e <= 133;
         }
         function K(e) {
@@ -17318,7 +16885,7 @@
         function He(e, t) {
           return (e ? 2 : 0) | (t ? 1 : 0);
         }
-        class $e {
+        class ze {
           constructor() {
             ((this.sawUnambiguousESM = !1),
               (this.ambiguousScriptDifferentAst = !1));
@@ -17345,7 +16912,7 @@
             return null == (n = this.plugins.get(e)) ? void 0 : n[t];
           }
         }
-        function ze(e, t) {
+        function $e(e, t) {
           void 0 === e.trailingComments
             ? (e.trailingComments = t)
             : e.trailingComments.unshift(...t);
@@ -17361,9 +16928,9 @@
           for (; null === r && i > 0; ) r = t[--i];
           null === r || r.start > n.start
             ? Ke(e, n.comments)
-            : ze(r, n.comments);
+            : $e(r, n.comments);
         }
-        class qe extends $e {
+        class qe extends ze {
           addComment(e) {
             this.filename && (e.loc.filename = this.filename);
             const { commentsLen: t } = this.state;
@@ -17393,7 +16960,7 @@
             var t;
             const { comments: n } = e;
             if (null !== e.leadingNode || null !== e.trailingNode)
-              (null !== e.leadingNode && ze(e.leadingNode, n),
+              (null !== e.leadingNode && $e(e.leadingNode, n),
                 null !== e.trailingNode &&
                   (function (e, t) {
                     void 0 === e.leadingComments
@@ -21405,7 +20972,7 @@
                     case 10: {
                       const e = this.startNode();
                       if ((this.next(), !this.match(11) && !this.match(21)))
-                        if (z(this.state.type) || this.match(78)) {
+                        if ($(this.state.type) || this.match(78)) {
                           const e = this.lookahead().type;
                           i = 17 !== e && 14 !== e;
                         } else i = !0;
@@ -21508,7 +21075,7 @@
                         const e = J(this.state.type);
                         return (this.next(), super.createIdentifier(t, e));
                       }
-                      if (z(this.state.type))
+                      if ($(this.state.type))
                         return this.isContextual(129)
                           ? this.flowParseInterfaceType()
                           : this.flowIdentToTypeAnnotation(
@@ -21685,13 +21252,13 @@
                     if ("declare" === t.name) {
                       if (
                         this.match(80) ||
-                        z(this.state.type) ||
+                        $(this.state.type) ||
                         this.match(68) ||
                         this.match(74) ||
                         this.match(82)
                       )
                         return this.flowParseDeclare(e);
-                    } else if (z(this.state.type)) {
+                    } else if ($(this.state.type)) {
                       if ("interface" === t.name)
                         return this.flowParseInterface(e);
                       if ("type" === t.name) return this.flowParseTypeAlias(e);
@@ -22708,7 +22275,7 @@
                 }
                 flowEnumParseExplicitType({ enumName: e }) {
                   if (!this.eatContextual(102)) return null;
-                  if (!z(this.state.type))
+                  if (!$(this.state.type))
                     throw this.raise(
                       Ae.EnumInvalidExplicitTypeUnknownSupplied,
                       this.state.startLoc,
@@ -22916,7 +22483,7 @@
                   return je;
                 }
                 tsIsIdentifier() {
-                  return z(this.state.type);
+                  return $(this.state.type);
                 }
                 tsTokenCanFollowModifier() {
                   return (
@@ -22942,7 +22509,7 @@
                 }
                 tsParseModifier(e, t, n) {
                   if (
-                    !z(this.state.type) &&
+                    !$(this.state.type) &&
                     58 !== this.state.type &&
                     75 !== this.state.type
                   )
@@ -23111,7 +22678,7 @@
                     t = [];
                   for (this.expect(5); !this.match(8); ) {
                     const e = this.state.type;
-                    (z(e) || 134 === e
+                    ($(e) || 134 === e
                       ? t.push(super.parsePropertyDefinition(null))
                       : this.unexpected(),
                       this.eat(12));
@@ -23246,7 +22813,7 @@
                 tsIsUnambiguouslyIndexSignature() {
                   return (
                     this.next(),
-                    !!z(this.state.type) && (this.next(), this.match(14))
+                    !!$(this.state.type) && (this.next(), this.match(14))
                   );
                 }
                 tsTryParseIndexSignature(e) {
@@ -23618,7 +23185,7 @@
                       return this.tsParseTemplateLiteralType();
                     default: {
                       const { type: e } = this.state;
-                      if (z(e) || 88 === e || 84 === e) {
+                      if ($(e) || 88 === e || 84 === e) {
                         const t =
                           88 === e
                             ? "TSVoidKeyword"
@@ -23771,7 +23338,7 @@
                   );
                 }
                 tsSkipParameterStart() {
-                  if (z(this.state.type) || this.match(78))
+                  if ($(this.state.type) || this.match(78))
                     return (this.next(), !0);
                   if (this.match(5)) {
                     const { errors: e } = this.state,
@@ -23881,7 +23448,7 @@
                   const e = this.state.containsEsc;
                   return (
                     this.next(),
-                    !(!z(this.state.type) && !this.match(78)) &&
+                    !(!$(this.state.type) && !this.match(78)) &&
                       (e &&
                         this.raise(
                           x.InvalidEscapedReservedWord,
@@ -23990,7 +23557,7 @@
                   if (this.hasFollowingLineBreak()) return null;
                   (this.expectContextual(129),
                     t.declare && (e.declare = !0),
-                    z(this.state.type)
+                    $(this.state.type)
                       ? ((e.id = this.parseIdentifier()),
                         this.checkIdentifier(e.id, 130))
                       : ((e.id = null),
@@ -24292,7 +23859,7 @@
                         if (t) return t;
                       }
                       default:
-                        if (z(t))
+                        if ($(t))
                           return this.tsParseDeclaration(
                             e,
                             this.state.type,
@@ -24315,7 +23882,7 @@
                     case 124:
                       if (
                         this.tsCheckLineTerminator(n) &&
-                        (this.match(80) || z(this.state.type))
+                        (this.match(80) || $(this.state.type))
                       )
                         return this.tsParseAbstractDeclaration(e, r);
                       break;
@@ -24325,7 +23892,7 @@
                           return this.tsParseAmbientExternalModuleDeclaration(
                             e,
                           );
-                        if (z(this.state.type))
+                        if ($(this.state.type))
                           return (
                             (e.kind = "module"),
                             this.tsParseModuleOrNamespaceDeclaration(e)
@@ -24333,14 +23900,14 @@
                       }
                       break;
                     case 128:
-                      if (this.tsCheckLineTerminator(n) && z(this.state.type))
+                      if (this.tsCheckLineTerminator(n) && $(this.state.type))
                         return (
                           (e.kind = "namespace"),
                           this.tsParseModuleOrNamespaceDeclaration(e)
                         );
                       break;
                     case 130:
-                      if (this.tsCheckLineTerminator(n) && z(this.state.type))
+                      if (this.tsCheckLineTerminator(n) && $(this.state.type))
                         return this.tsParseTypeAliasDeclaration(e);
                   }
                 }
@@ -24656,7 +24223,7 @@
                   if (this.match(134))
                     return ((e.importKind = "value"), super.parseImport(e));
                   let t;
-                  if (z(this.state.type) && 61 === this.lookaheadCharCode())
+                  if ($(this.state.type) && 61 === this.lookaheadCharCode())
                     return (
                       (e.importKind = "value"),
                       this.tsParseImportEqualsDeclaration(e)
@@ -24969,7 +24536,7 @@
                       this.state.startLoc,
                     );
                   const r =
-                    (z(this.state.type) &&
+                    ($(this.state.type) &&
                       this.tsTryParseExportDeclaration()) ||
                     super.parseExportDeclaration(e);
                   return r
@@ -25702,7 +25269,7 @@
                   if (this.match(54)) {
                     const e = this.state.startLoc,
                       t = this.startNode();
-                    if ((this.next(), z(this.state.type))) {
+                    if ((this.next(), $(this.state.type))) {
                       const e = this.parseIdentifierName(),
                         n = this.createIdentifier(t, e);
                       if (
@@ -26053,7 +25620,7 @@
             let i;
             e ? (i = !1) : ((e = new ft()), (i = !0));
             const { type: s } = this.state;
-            (10 === s || z(s)) &&
+            (10 === s || $(s)) &&
               (this.state.potentialArrowAt = this.state.start);
             let o = this.parseMaybeConditional(e);
             if (
@@ -26628,7 +26195,7 @@
                     !1,
                     !0,
                   );
-                if (z(r)) {
+                if ($(r)) {
                   if (
                     this.isContextual(127) &&
                     123 === this.lookaheadInLineCharCode()
@@ -26647,7 +26214,7 @@
                           this.startNodeAtNode(n),
                         )
                       );
-                    if (z(e))
+                    if ($(e))
                       return 61 === this.lookaheadCharCode()
                         ? this.parseAsyncArrowUnaryFunction(
                             this.startNodeAtNode(n),
@@ -28128,7 +27695,7 @@
             }
             const a = this.state.value,
               u = this.parseExpression();
-            return z(n) && "Identifier" === u.type && this.eat(14)
+            return $(n) && "Identifier" === u.type && this.eat(14)
               ? this.parseLabeledStatement(r, a, u, e)
               : this.parseExpressionStatement(r, u, t);
           }
@@ -28713,7 +28280,7 @@
             );
           }
           parseFunctionId(e) {
-            return e || z(this.state.type) ? this.parseIdentifier() : null;
+            return e || $(this.state.type) ? this.parseIdentifier() : null;
           }
           parseFunctionParams(e, t) {
             (this.expect(10),
@@ -28861,7 +28428,7 @@
                     void this.pushClassMethod(e, i, !0, !1, !1, !1))
               );
             }
-            const p = !this.state.containsEsc && z(this.state.type),
+            const p = !this.state.containsEsc && $(this.state.type),
               h = this.parseClassElementName(t),
               d = p ? h.name : null,
               f = this.isPrivateName(h),
@@ -29055,7 +28622,7 @@
               this.scope.exit());
           }
           parseClassId(e, t, n, r = 8331) {
-            if (z(this.state.type))
+            if ($(this.state.type))
               ((e.id = this.parseIdentifier()),
                 t && this.declareNameFromIdentifier(e.id, r));
             else {
@@ -29236,7 +28803,7 @@
           }
           isExportDefaultSpecifier() {
             const { type: e } = this.state;
-            if (z(e)) {
+            if ($(e)) {
               if ((95 === e && !this.state.containsEsc) || 100 === e) return !1;
               if ((130 === e || 129 === e) && !this.state.containsEsc) {
                 const e = this.nextTokenStart(),
@@ -29251,7 +28818,7 @@
             } else if (!this.match(65)) return !1;
             const t = this.nextTokenStart(),
               n = this.isUnparsedContextual(t, "from");
-            if (44 === this.input.charCodeAt(t) || (z(this.state.type) && n))
+            if (44 === this.input.charCodeAt(t) || ($(this.state.type) && n))
               return !0;
             if (this.match(65) && n) {
               const e = this.input.charCodeAt(this.nextTokenStartSince(t + 4));
@@ -29481,7 +29048,7 @@
           }
           isPrecedingIdImportPhase(e) {
             const { type: t } = this.state;
-            return z(t)
+            return $(t)
               ? 98 !== t || 102 === this.lookaheadCharCode()
               : 12 !== t;
           }
@@ -29802,8 +29369,8 @@
           const t = {};
           for (const n of Object.keys(e)) t[n] = Z(e[n]);
           return t;
-        })($);
-        function $t(e, t) {
+        })(z);
+        function zt(e, t) {
           let n = Ut;
           const r = new Map();
           if (null != e && e.plugins) {
@@ -29941,43 +29508,43 @@
                 const t = [];
                 for (const n of Nt) e.has(n) && t.push(n);
                 const n = t.join("|");
-                let r = zt.get(n);
+                let r = $t.get(n);
                 if (!r) {
                   r = Ut;
                   for (const e of t) r = It[e](r);
-                  zt.set(n, r);
+                  $t.set(n, r);
                 }
                 return r;
               })(r)));
           }
           return new n(e, t, r);
         }
-        const zt = new Map();
+        const $t = new Map();
         ((t.parse = function (e, t) {
           var n;
           if ("unambiguous" !== (null == (n = t) ? void 0 : n.sourceType))
-            return $t(t, e).parse();
+            return zt(t, e).parse();
           t = Object.assign({}, t);
           try {
             t.sourceType = "module";
-            const n = $t(t, e),
+            const n = zt(t, e),
               r = n.parse();
             if (n.sawUnambiguousESM) return r;
             if (n.ambiguousScriptDifferentAst)
               try {
-                return ((t.sourceType = "script"), $t(t, e).parse());
+                return ((t.sourceType = "script"), zt(t, e).parse());
               } catch (e) {}
             else r.program.sourceType = "script";
             return r;
           } catch (n) {
             try {
-              return ((t.sourceType = "script"), $t(t, e).parse());
+              return ((t.sourceType = "script"), zt(t, e).parse());
             } catch (e) {}
             throw n;
           }
         }),
           (t.parseExpression = function (e, t) {
-            const n = $t(t, e);
+            const n = zt(t, e);
             return (
               n.options.strictMode && (n.state.strict = !0),
               n.getExpression()
@@ -33325,177 +32892,6 @@
         }
         e.exports = { linter: a, fixer: a };
       },
-      32042(e, t, n) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.default = void 0));
-        var r = n(92222);
-        t.default = (e, t = {}) => {
-          const {
-              Syntax: n,
-              RuleError: i,
-              report: s,
-              getSource: o,
-              locator: a,
-              fixer: u,
-            } = e,
-            c = t.allows ?? [],
-            l = t.disableEmojiEmphasisPatterns ?? !1,
-            p = t.disableInfoPatterns ?? !1,
-            h = t.disableHeadingEmphasisPatterns ?? !1,
-            d = [
-              "注意",
-              "重要",
-              "ポイント",
-              "メモ",
-              "参考",
-              "補足",
-              "確認",
-              "チェック",
-              "推奨",
-              "おすすめ",
-              "検出される例",
-              "推奨される表現",
-              "良い例",
-              "悪い例",
-              "例",
-              "サンプル",
-              "使用例",
-              "設定例",
-            ];
-          return {
-            [n.Paragraph](e) {
-              const t = o(e);
-              if (c.length > 0) {
-                if ((0, r.matchPatterns)(t, c).length > 0) return;
-              }
-              if ("ListItem" === e.parent?.type) return;
-              const n = [];
-              if (!l) {
-                const r =
-                  /(ℹ️|🔍|✅|❌|⚠️|💡|📝|📋|📌|🔗|🎯|🚀|⭐|✨|💯|🔥|📊|📈)\s*\*\*([^*]+)\*\*/gu;
-                for (const o of t.matchAll(r)) {
-                  const t = o.index ?? 0,
-                    r = t + o[0].length;
-                  (n.push(o),
-                    s(
-                      e,
-                      new i(
-                        "絵文字と太字の組み合わせは機械的な印象を与える可能性があります。より自然な表現を検討してください。",
-                        { padding: a.range([t, r]) },
-                      ),
-                    ));
-                }
-              }
-              if (!p) {
-                const r = new RegExp(
-                  `\\*\\*(${d.join("|")})([：:].*?)?\\*\\*`,
-                  "g",
-                );
-                for (const o of t.matchAll(r)) {
-                  const t = o.index ?? 0,
-                    r = t + o[0].length,
-                    u = o[1];
-                  n.some((e) => {
-                    const n = e.index ?? 0,
-                      i = n + e[0].length;
-                    return t < i && r > n;
-                  }) ||
-                    s(
-                      e,
-                      new i(
-                        `「**${u}**」のような太字の情報プレフィックスは機械的な印象を与える可能性があります。より自然な表現を検討してください。`,
-                        { padding: a.range([t, r]) },
-                      ),
-                    );
-                }
-              }
-            },
-            [n.ListItem](e) {
-              const t = o(e);
-              if (c.length > 0) {
-                if ((0, r.matchPatterns)(t, c).length > 0) return;
-              }
-              const n = [];
-              if (!l) {
-                const r =
-                  /(ℹ️|🔍|✅|❌|⚠️|💡|📝|📋|📌|🔗|🎯|🚀|⭐|✨|💯|🔥|📊|📈)\s*\*\*([^*]+)\*\*/gu;
-                for (const o of t.matchAll(r)) {
-                  const t = o.index ?? 0,
-                    r = t + o[0].length;
-                  (n.push(o),
-                    s(
-                      e,
-                      new i(
-                        "リストアイテムで絵文字と太字の組み合わせは機械的な印象を与える可能性があります。より自然な表現を検討してください。",
-                        { padding: a.range([t, r]) },
-                      ),
-                    ));
-                }
-              }
-              if (!p) {
-                const r = new RegExp(
-                  `\\*\\*(${d.join("|")})([：:].*?)?\\*\\*`,
-                  "g",
-                );
-                for (const o of t.matchAll(r)) {
-                  const t = o.index ?? 0,
-                    r = t + o[0].length,
-                    u = o[1];
-                  n.some((e) => {
-                    const n = e.index ?? 0,
-                      i = n + e[0].length;
-                    return t < i && r > n;
-                  }) ||
-                    s(
-                      e,
-                      new i(
-                        `リストアイテムで「**${u}**」のような太字の情報プレフィックスは機械的な印象を与える可能性があります。より自然な表現を検討してください。`,
-                        { padding: a.range([t, r]) },
-                      ),
-                    );
-                }
-              }
-            },
-            [n.Header](e) {
-              if (h) return;
-              const t = o(e);
-              if (c.length > 0) {
-                if ((0, r.matchPatterns)(t, c).length > 0) return;
-              }
-              const n = /(\*\*|__)(.*?)\1/g;
-              for (const r of t.matchAll(n)) {
-                const t = r.index ?? 0,
-                  n = t + r[0].length,
-                  o = r[2];
-                s(
-                  e,
-                  new i(
-                    "見出し内の太字は不要です。見出し自体が強調のため、追加の太字は冗長です。",
-                    {
-                      padding: a.range([t, n]),
-                      fix: u.replaceTextRange([t, n], o),
-                    },
-                  ),
-                );
-              }
-            },
-          };
-        };
-      },
-      32137(e, t) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.isRegExpString = t.parseRegExpString = void 0));
-        var n = /^\/(.+)\/([guimysd]*)$/;
-        t.parseRegExpString = function (e) {
-          var t = e.match(n);
-          return t ? { source: t[1], flagString: t[2] } : null;
-        };
-        t.isRegExpString = function (e) {
-          return n.test(e);
-        };
-      },
       32143(e) {
         "use strict";
         function t(e) {
@@ -33748,11 +33144,11 @@
             return t == L || t == B || t == M || t == j;
           }
           var H = 9007199254740991;
-          function $(e) {
+          function z(e) {
             return "number" == typeof e && e > -1 && e % 1 == 0 && e <= H;
           }
-          function z(e) {
-            return null != e && $(e.length) && !U(e);
+          function $(e) {
+            return null != e && z(e.length) && !U(e);
           }
           var K = {};
           function G() {}
@@ -33836,7 +33232,7 @@
             Oe = "[object Uint32Array]",
             Re = {};
           function Me(e) {
-            return J(e) && $(e.length) && !!Re[R(e)];
+            return J(e) && z(e.length) && !!Re[R(e)];
           }
           function Le(e) {
             return function (t) {
@@ -33878,14 +33274,14 @@
                 return e || (Ue && Ue.binding && Ue.binding("util"));
               } catch (e) {}
             })(),
-            $e = He && He.isTypedArray,
-            ze = $e ? Le($e) : Me,
+            ze = He && He.isTypedArray,
+            $e = ze ? Le(ze) : Me,
             Ke = Object.prototype.hasOwnProperty;
           function Ge(e, t) {
             var n = re(e),
               r = !n && ne(e),
               i = !n && !r && ue(e),
-              s = !n && !r && !i && ze(e),
+              s = !n && !r && !i && $e(e),
               o = n || r || i || s,
               a = o ? X(e.length, String) : [],
               u = a.length;
@@ -33922,7 +33318,7 @@
             return t;
           }
           function Qe(e) {
-            return z(e) ? Ge(e) : Ye(e);
+            return $(e) ? Ge(e) : Ye(e);
           }
           function Ze(e) {
             var t = -1,
@@ -33952,7 +33348,7 @@
             };
           }
           function nt(e) {
-            if (z(e)) return Ze(e);
+            if ($(e)) return Ze(e);
             var t = W(e);
             return t ? et(t) : tt(e);
           }
@@ -34008,7 +33404,7 @@
           }
           var ut = ot(st, 1 / 0),
             ct = function (e, t, n) {
-              (z(e) ? at : ut)(e, E(t), n);
+              ($(e) ? at : ut)(e, E(t), n);
             };
           function lt(e) {
             return function (t, n, r) {
@@ -34227,18 +33623,18 @@
             return jt.test(e);
           }
           var Ht = "\\ud800-\\udfff",
-            $t = "[" + Ht + "]",
-            zt = "[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]",
+            zt = "[" + Ht + "]",
+            $t = "[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]",
             Kt = "\\ud83c[\\udffb-\\udfff]",
             Gt = "[^" + Ht + "]",
             qt = "(?:\\ud83c[\\udde6-\\uddff]){2}",
             Vt = "[\\ud800-\\udbff][\\udc00-\\udfff]",
-            Wt = "(?:" + zt + "|" + Kt + ")?",
+            Wt = "(?:" + $t + "|" + Kt + ")?",
             Xt = "[\\ufe0e\\ufe0f]?",
             Jt =
               "(?:\\u200d(?:" + [Gt, qt, Vt].join("|") + ")" + Xt + Wt + ")*",
             Yt = Xt + Wt + Jt,
-            Qt = "(?:" + [Gt + zt + "?", zt, qt, Vt, $t].join("|") + ")",
+            Qt = "(?:" + [Gt + $t + "?", $t, qt, Vt, zt].join("|") + ")",
             Zt = RegExp(Kt + "(?=" + Kt + ")|" + Qt + Yt, "g");
           function en(e) {
             return e.match(Zt) || [];
@@ -34669,11 +34065,11 @@
                     (r = !1));
                 });
           }
-          function $n(e) {
+          function zn(e) {
             return !e;
           }
-          var zn = lt(Sn($n, $n)),
-            Kn = ft(Sn($n, $n)),
+          var $n = lt(Sn(zn, zn)),
+            Kn = ft(Sn(zn, zn)),
             Gn = ot(Kn, 1);
           function qn(e) {
             return function (t) {
@@ -34721,7 +34117,7 @@
             );
           }
           function Xn(e, t, n, r) {
-            (z(t) ? Vn : Wn)(e, t, E(n), r || G);
+            ($(t) ? Vn : Wn)(e, t, E(n), r || G);
           }
           var Jn = lt(Xn),
             Yn = ft(Xn),
@@ -34818,7 +34214,7 @@
           var cr = h(l ? r.nextTick : c ? setImmediate : p);
           function lr(e, t, n) {
             n = n || G;
-            var r = z(t) ? [] : {};
+            var r = $(t) ? [] : {};
             e(
               t,
               function (e, t, n) {
@@ -35089,7 +34485,7 @@
             };
             r(i);
           }
-          function $r(e, t, n) {
+          function zr(e, t, n) {
             Hr(
               function () {
                 return !e.apply(this, arguments);
@@ -35098,7 +34494,7 @@
               n,
             );
           }
-          var zr = function (e, t) {
+          var $r = function (e, t) {
               if (((t = q(t || G)), !re(e)))
                 return t(
                   new Error(
@@ -35145,7 +34541,7 @@
               eachOfSeries: gn,
               eachSeries: Un,
               ensureAsync: Hn,
-              every: zn,
+              every: $n,
               everyLimit: Kn,
               everySeries: Gn,
               filter: Jn,
@@ -35192,10 +34588,10 @@
               transform: Br,
               tryEach: jr,
               unmemoize: Ur,
-              until: $r,
-              waterfall: zr,
+              until: zr,
+              waterfall: $r,
               whilst: Hr,
-              all: zn,
+              all: $n,
               allLimit: Kn,
               allSeries: Gn,
               any: wr,
@@ -35246,7 +34642,7 @@
             (t.eachOfSeries = gn),
             (t.eachSeries = Un),
             (t.ensureAsync = Hn),
-            (t.every = zn),
+            (t.every = $n),
             (t.everyLimit = Kn),
             (t.everySeries = Gn),
             (t.filter = Jn),
@@ -35293,10 +34689,10 @@
             (t.transform = Br),
             (t.tryEach = jr),
             (t.unmemoize = Ur),
-            (t.until = $r),
-            (t.waterfall = zr),
+            (t.until = zr),
+            (t.waterfall = $r),
             (t.whilst = Hr),
-            (t.all = zn),
+            (t.all = $n),
             (t.allLimit = Kn),
             (t.allSeries = Gn),
             (t.any = wr),
@@ -38508,174 +37904,6 @@
           }),
           (e.exports = u));
       },
-      36376(e, t, n) {
-        "use strict";
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.default = void 0));
-        var r = n(92222);
-        t.default = (e, t = {}) => {
-          const {
-              Syntax: n,
-              RuleError: i,
-              report: s,
-              getSource: o,
-              locator: a,
-            } = e,
-            u = t.allows ?? [],
-            c = t.disableAbsolutenessPatterns ?? !1,
-            l = t.disableAbstractPatterns ?? !1,
-            p = t.disabledPredictivePatterns ?? !1,
-            h = [
-              {
-                pattern: /革命的な/g,
-                message:
-                  "「革命的な」という表現は過度に誇張的である可能性があります。具体的な改善点を述べることを検討してください。",
-              },
-              {
-                pattern: /ゲームチェンジャー/g,
-                message:
-                  "「ゲームチェンジャー」という表現は機械的な印象を与える可能性があります。具体的な変化を説明することを検討してください。",
-              },
-              {
-                pattern: /世界初の/g,
-                message:
-                  "「世界初の」という表現は過度に強調的である可能性があります。事実に基づいた表現を検討してください。",
-              },
-              {
-                pattern: /究極の/g,
-                message:
-                  "「究極の」という表現は誇張的である可能性があります。より具体的で控えめな表現を検討してください。",
-              },
-              {
-                pattern: /完全に/g,
-                message:
-                  "「完全に」という絶対的な表現は過度に断定的である可能性があります。「多くの場合」などの表現を検討してください。",
-              },
-              {
-                pattern: /完璧な/g,
-                message:
-                  "「完璧な」という表現は過度に理想化している可能性があります。具体的な利点を述べることを検討してください。",
-              },
-              {
-                pattern: /最高の/g,
-                message:
-                  "「最高の」という表現は主観的で誇張的である可能性があります。より客観的な評価を示すことを検討してください。",
-              },
-              {
-                pattern: /最先端の/g,
-                message:
-                  "「最先端の」という表現は定型的である可能性があります。具体的な技術的特徴を説明することを検討してください。",
-              },
-              {
-                pattern: /大幅に/g,
-                message:
-                  "「大幅に」という表現は誇張的である可能性があります。具体的な数値や割合を示すことを検討してください。",
-              },
-            ],
-            d = [
-              {
-                pattern: /魔法のように/g,
-                message:
-                  "「魔法のように」という比喩的表現は現実味に欠ける可能性があります。具体的な仕組みを説明することを検討してください。",
-              },
-              {
-                pattern: /奇跡的な/g,
-                message:
-                  "「奇跡的な」という表現は過度に感情的である可能性があります。具体的な成果を示すことを検討してください。",
-              },
-              {
-                pattern: /驚異的な/g,
-                message:
-                  "「驚異的な」という表現は誇張的である可能性があります。数値や事実に基づいた表現を検討してください。",
-              },
-              {
-                pattern: /可能性を解き放つ/g,
-                message:
-                  "「可能性を解き放つ」という抽象的な表現は曖昧である可能性があります。具体的な利益を説明することを検討してください。",
-              },
-              {
-                pattern: /潜在能力を引き出す/g,
-                message:
-                  "「潜在能力を引き出す」という表現は抽象的である可能性があります。具体的な効果を説明することを検討してください。",
-              },
-              {
-                pattern: /民主化する/g,
-                message:
-                  "「民主化する」という表現は技術文脈では曖昧である可能性があります。「利用しやすくする」などの具体的な表現を検討してください。",
-              },
-              {
-                pattern: /スーパーチャージ/g,
-                message:
-                  "「スーパーチャージ」という表現は機械的な印象を与える可能性があります。具体的な改善内容を説明することを検討してください。",
-              },
-              {
-                pattern: /驚嘆させ/g,
-                message:
-                  "「驚嘆させる」という表現は過度に感情的である可能性があります。客観的な評価を示すことを検討してください。",
-              },
-            ],
-            f = [
-              {
-                pattern: /業界を再定義/g,
-                message:
-                  "「業界を再定義する」という表現は誇張的である可能性があります。具体的な変化を説明することを検討してください。",
-              },
-              {
-                pattern: /未来を変える/g,
-                message:
-                  "「未来を変える」という表現は大げさである可能性があります。具体的な改善点を述べることを検討してください。",
-              },
-              {
-                pattern: /パラダイムシフト/g,
-                message:
-                  "「パラダイムシフト」という表現は定型的である可能性があります。具体的な変化を説明することを検討してください。",
-              },
-              {
-                pattern: /不可避の/g,
-                message:
-                  "「不可避の」という表現は過度に断定的である可能性があります。「可能性が高い」などの表現を検討してください。",
-              },
-              {
-                pattern: /新たな基準を設定/g,
-                message:
-                  "「新たな基準を設定」という表現は誇張的である可能性があります。具体的な改善内容を説明することを検討してください。",
-              },
-              {
-                pattern: /次世代の/g,
-                message:
-                  "「次世代の」という表現は定型的である可能性があります。具体的な技術的進歩を説明することを検討してください。",
-              },
-              {
-                pattern: /フロンティアを開拓/g,
-                message:
-                  "「フロンティアを開拓」という比喩的表現は抽象的である可能性があります。具体的な取り組みを説明することを検討してください。",
-              },
-              {
-                pattern: /根本的に変革/g,
-                message:
-                  "「根本的に変革」という表現は誇張的である可能性があります。具体的な変化を説明することを検討してください。",
-              },
-            ];
-          return {
-            [n.Str](e) {
-              const t = o(e);
-              if (u.length > 0) {
-                if ((0, r.matchPatterns)(t, u).length > 0) return;
-              }
-              const n = [...(c ? [] : h), ...(l ? [] : d), ...(p ? [] : f)];
-              for (const { pattern: r, message: o } of n) {
-                const n = t.matchAll(r);
-                for (const t of n) {
-                  const n = t.index ?? 0,
-                    r = [n, n + t[0].length],
-                    u = new i(o, { padding: a.range(r) });
-                  s(e, u);
-                }
-              }
-            },
-          };
-        };
-      },
       36429(e, t, n) {
         "use strict";
         var r = n(59098)(/[!-/:-@[-`{-~]/);
@@ -40982,13 +40210,13 @@
             };
           return t;
         }
-        var $ = (e) => {
+        var z = (e) => {
             if ("[object Object]" !== Object.prototype.toString.call(e))
               return !1;
             const t = Object.getPrototypeOf(e);
             return null === t || t === Object.prototype;
           },
-          z = (function e() {
+          $ = (function e() {
             var t = [],
               n = j(),
               r = {},
@@ -41044,7 +40272,7 @@
                       if ((n = t[i])[0] === e) return n;
                   })(e);
                   r
-                    ? ($(r[1]) && $(n) && (n = m(r[1], n)), (r[1] = n))
+                    ? (z(r[1]) && z(n) && (n = m(r[1], n)), (r[1] = n))
                     : t.push(K.call(arguments));
                 }
               }),
@@ -42259,7 +41487,7 @@
                         var t = e.slice(4);
                         return He.test(t)
                           ? e
-                          : ("-" !== (t = t.replace($e, ze)).charAt(0) &&
+                          : ("-" !== (t = t.replace(ze, $e)).charAt(0) &&
                               (t = "-" + t),
                             Be + t);
                       })(t)),
@@ -42268,8 +41496,8 @@
           },
           Ue = /^data[-\w.:]+$/i,
           He = /-[a-z]/g,
-          $e = /[A-Z]/g;
-        function ze(e) {
+          ze = /[A-Z]/g;
+        function $e(e) {
           return "-" + e.toLowerCase();
         }
         function Ke(e) {
@@ -44050,8 +43278,8 @@
         ]);
         const Ut = dt,
           Ht = [45, 45],
-          $t = [68, 79, 67, 84, 89, 80, 69],
-          zt = [91, 67, 68, 65, 84, 65, 91],
+          zt = [68, 79, 67, 84, 89, 80, 69],
+          $t = [91, 67, 68, 65, 84, 65, 91],
           Kt = [115, 99, 114, 105, 112, 116],
           Gt = [80, 85, 66, 76, 73, 67],
           qt = [83, 89, 83, 84, 69, 77],
@@ -44131,8 +43359,8 @@
           jn = "COMMENT_STATE",
           Un = "COMMENT_LESS_THAN_SIGN_STATE",
           Hn = "COMMENT_LESS_THAN_SIGN_BANG_STATE",
-          $n = "COMMENT_LESS_THAN_SIGN_BANG_DASH_STATE",
-          zn = "COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH_STATE",
+          zn = "COMMENT_LESS_THAN_SIGN_BANG_DASH_STATE",
+          $n = "COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH_STATE",
           Kn = "COMMENT_END_DASH_STATE",
           Gn = "COMMENT_END_STATE",
           qn = "COMMENT_END_BANG_STATE",
@@ -44972,9 +44200,9 @@
           [Mn](e) {
             this._consumeSequenceIfMatch(Ht, e, !0)
               ? (this._createCommentToken(), (this.state = Ln))
-              : this._consumeSequenceIfMatch($t, e, !1)
+              : this._consumeSequenceIfMatch(zt, e, !1)
                 ? (this.state = Vn)
-                : this._consumeSequenceIfMatch(zt, e, !0)
+                : this._consumeSequenceIfMatch($t, e, !0)
                   ? this.allowCDATA
                     ? (this.state = cr)
                     : (this._err("cdata-in-html-content"),
@@ -45027,15 +44255,15 @@
           }
           [Hn](e) {
             e === Ut.HYPHEN_MINUS
-              ? (this.state = $n)
+              ? (this.state = zn)
               : this._reconsumeInState(jn);
           }
-          [$n](e) {
+          [zn](e) {
             e === Ut.HYPHEN_MINUS
-              ? (this.state = zn)
+              ? (this.state = $n)
               : this._reconsumeInState(Kn);
           }
-          [zn](e) {
+          [$n](e) {
             (e !== Ut.GREATER_THAN_SIGN &&
               e !== Ut.EOF &&
               this._err("nested-comment"),
@@ -45935,8 +45163,8 @@
         }
         ((Hr.MARKER_ENTRY = "MARKER_ENTRY"),
           (Hr.ELEMENT_ENTRY = "ELEMENT_ENTRY"));
-        var $r = Hr;
-        class zr {
+        var zr = Hr;
+        class $r {
           constructor(e) {
             const t = {},
               n = this._getOverriddenMethods(this, t);
@@ -45947,14 +45175,14 @@
             throw new Error("Not implemented");
           }
         }
-        zr.install = function (e, t, n) {
+        $r.install = function (e, t, n) {
           e.__mixins || (e.__mixins = []);
           for (let n = 0; n < e.__mixins.length; n++)
             if (e.__mixins[n].constructor === t) return e.__mixins[n];
           const r = new t(e, n);
           return (e.__mixins.push(r), r);
         };
-        var Kr = zr,
+        var Kr = $r,
           Gr = class extends Kr {
             constructor(e) {
               (super(e),
@@ -47550,7 +46778,7 @@
             n
           );
         }
-        function $i(e, t) {
+        function zi(e, t) {
           let n = null;
           for (let r = e.openElements.stackTop; r >= 0; r--) {
             const i = e.openElements.items[r];
@@ -47564,7 +46792,7 @@
             n
           );
         }
-        function zi(e, t, n) {
+        function $i(e, t, n) {
           let r = t,
             i = e.openElements.getCommonAncestor(t);
           for (let s = 0, o = i; o !== n; s++, o = i) {
@@ -47612,10 +46840,10 @@
         function Vi(e, t) {
           let n;
           for (let r = 0; r < 8 && ((n = Hi(e, t)), n); r++) {
-            const t = $i(e, n);
+            const t = zi(e, n);
             if (!t) break;
             e.activeFormattingElements.bookmark = n;
-            const r = zi(e, t, n.element),
+            const r = $i(e, t, n.element),
               i = e.openElements.getCommonAncestor(n.element);
             (e.treeAdapter.detachNode(r), Gi(e, i, r), qi(e, t, n));
           }
@@ -48832,10 +48060,10 @@
               maskSymbol: e,
             };
           },
-          $s = function () {
+          zs = function () {
             return { type: "StringSourceReplacerEmptyValueCommand" };
           },
-          zs = z().use(
+          $s = $().use(
             function (e) {
               var t = Z(e, this.data("settings")),
                 n = t.position;
@@ -49288,7 +48516,7 @@
                                 this.pop();
                             }
                           })(this.document, this.treeAdapter)),
-                          (this.activeFormattingElements = new $r(
+                          (this.activeFormattingElements = new zr(
                             this.treeAdapter,
                           )),
                           (this.tmplInsertionModeStack = []),
@@ -49612,7 +48840,7 @@
                             if (
                               (t--,
                               (n = this.activeFormattingElements.entries[t]),
-                              n.type === $r.MARKER_ENTRY ||
+                              n.type === zr.MARKER_ENTRY ||
                                 this.openElements.contains(n.element))
                             ) {
                               t++;
@@ -49935,7 +49163,7 @@
                             node: t,
                             parent: n,
                             maskValue: Hs,
-                            emptyValue: $s,
+                            emptyValue: zs,
                           }),
                     s = i
                       ? (function (e, t) {
@@ -50010,7 +49238,7 @@
                     return "Html" === e.type;
                   })(n)
                     ? (function (e) {
-                        return zs.parse(e);
+                        return $s.parse(e);
                       })(n.value)
                     : n,
                   o = this._valueOf({ node: s, parent: r, options: i });
@@ -53104,7 +52332,7 @@
           if (n + r > e.length) throw new RangeError("Index out of range");
         }
         function R(e, t, n, r, i) {
-          z(t, r, i, e, n, 7);
+          $(t, r, i, e, n, 7);
           let s = Number(t & BigInt(4294967295));
           ((e[n++] = s),
             (s >>= 8),
@@ -53126,7 +52354,7 @@
           );
         }
         function M(e, t, n, r, i) {
-          z(t, r, i, e, n, 7);
+          $(t, r, i, e, n, 7);
           let s = Number(t & BigInt(4294967295));
           ((e[n + 7] = s),
             (s >>= 8),
@@ -53658,14 +52886,14 @@
             }
           };
         }
-        function $(e) {
+        function z(e) {
           let t = "",
             n = e.length;
           const r = "-" === e[0] ? 1 : 0;
           for (; n >= r + 4; n -= 3) t = `_${e.slice(n - 3, n)}${t}`;
           return `${e.slice(0, n)}${t}`;
         }
-        function z(e, t, n, r, i, s) {
+        function $(e, t, n, r, i, s) {
           if (e > n || e < t) {
             const r = "bigint" == typeof t ? "n" : "";
             let i;
@@ -53725,12 +52953,12 @@
                 i = n;
               return (
                 Number.isInteger(n) && Math.abs(n) > 2 ** 32
-                  ? (i = $(String(n)))
+                  ? (i = z(String(n)))
                   : "bigint" == typeof n &&
                     ((i = String(n)),
                     (n > BigInt(2) ** BigInt(32) ||
                       n < -(BigInt(2) ** BigInt(32))) &&
-                      (i = $(i)),
+                      (i = z(i)),
                     (i += "n")),
                 (r += ` It must be ${t}. Received ${i}`),
                 r
@@ -54724,15 +53952,6 @@
             },
           ],
         });
-      },
-      52834(e) {
-        "use strict";
-        e.exports = (e) => {
-          if ("string" != typeof e) throw new TypeError("Expected a string");
-          return e
-            .replace(/[|\\{}()[\]^$+*?.]/g, "\\$&")
-            .replace(/-/g, "\\x2d");
-        };
       },
       52912(e, t, n) {
         "use strict";
@@ -57578,7 +56797,7 @@
                   : 47 === i
                     ? (e.consume(i), T)
                     : 63 === i
-                      ? (e.consume(i), (p = 3), y.interrupt ? t : $)
+                      ? (e.consume(i), (p = 3), y.interrupt ? t : z)
                       : r(i)
                         ? (e.consume(i), (f = u(i)), (h = !0), b)
                         : n(i);
@@ -57589,11 +56808,11 @@
                   : 91 === i
                     ? (e.consume(i), (p = 5), (f = "CDATA["), (m = 0), D)
                     : r(i)
-                      ? (e.consume(i), (p = 4), y.interrupt ? t : $)
+                      ? (e.consume(i), (p = 4), y.interrupt ? t : z)
                       : n(i);
               }
               function v(r) {
-                return 45 === r ? (e.consume(r), y.interrupt ? t : $) : n(r);
+                return 45 === r ? (e.consume(r), y.interrupt ? t : z) : n(r);
               }
               function D(r) {
                 return r === f.charCodeAt(m++)
@@ -57697,16 +56916,16 @@
                   : 60 === t && 1 === p
                     ? (e.consume(t), j)
                     : 62 === t && 4 === p
-                      ? (e.consume(t), z)
+                      ? (e.consume(t), $)
                       : 63 === t && 3 === p
-                        ? (e.consume(t), $)
+                        ? (e.consume(t), z)
                         : 93 === t && 5 === p
                           ? (e.consume(t), H)
                           : !s(t) || (6 !== p && 7 !== p)
                             ? null === t || s(t)
                               ? M(t)
                               : (e.consume(t), R)
-                            : e.check(d, z, M)(t);
+                            : e.check(d, $, M)(t);
               }
               function M(t) {
                 return (e.exit("htmlFlowData"), L(t));
@@ -57722,28 +56941,28 @@
                     : (e.enter("htmlFlowData"), R(t));
               }
               function B(t) {
-                return 45 === t ? (e.consume(t), $) : R(t);
+                return 45 === t ? (e.consume(t), z) : R(t);
               }
               function j(t) {
                 return 47 === t ? (e.consume(t), (f = ""), U) : R(t);
               }
               function U(t) {
                 return 62 === t && l.indexOf(f.toLowerCase()) > -1
-                  ? (e.consume(t), z)
+                  ? (e.consume(t), $)
                   : r(t) && f.length < 8
                     ? (e.consume(t), (f += u(t)), U)
                     : R(t);
               }
               function H(t) {
-                return 93 === t ? (e.consume(t), $) : R(t);
-              }
-              function $(t) {
-                return 62 === t ? (e.consume(t), z) : R(t);
+                return 93 === t ? (e.consume(t), z) : R(t);
               }
               function z(t) {
+                return 62 === t ? (e.consume(t), $) : R(t);
+              }
+              function $(t) {
                 return null === t || s(t)
                   ? (e.exit("htmlFlowData"), K(t))
-                  : (e.consume(t), z);
+                  : (e.consume(t), $);
               }
               function K(n) {
                 return (e.exit("htmlFlow"), t(n));
@@ -59842,7 +59061,7 @@
             return e(t);
           };
         }
-        function $(e) {
+        function z(e) {
           var t = !1;
           if (null != e && "function" != typeof e.toString)
             try {
@@ -59850,7 +59069,7 @@
             } catch (e) {}
           return t;
         }
-        function z(e) {
+        function $(e) {
           var t = -1,
             n = Array(e.size);
           return (
@@ -60101,7 +59320,7 @@
         })();
         function Me(e, t) {
           for (
-            var n = 0, r = (t = Qe(t, e) ? [t] : ze(t)).length;
+            var n = 0, r = (t = Qe(t, e) ? [t] : $e(t)).length;
             null != e && n < r;
           )
             e = e[nt(t[n++])];
@@ -60122,8 +59341,8 @@
                     b = o;
                   f || (T = (T = We(e)) == s ? d : T);
                   E || (b = (b = We(t)) == s ? d : b);
-                  var A = T == d && !$(e),
-                    C = b == d && !$(t),
+                  var A = T == d && !z(e),
+                    C = b == d && !z(t),
                     S = T == b;
                   if (S && !A)
                     return (
@@ -60156,7 +59375,7 @@
                               case y:
                                 return e == t + "";
                               case p:
-                                var l = z;
+                                var l = $;
                               case g:
                                 var d = 2 & s;
                                 if ((l || (l = K), e.size != t.size && !d))
@@ -60237,7 +59456,7 @@
               (function (e) {
                 return !!Q && Q in e;
               })(e)
-            ) && (lt(e) || $(e) ? ne : w).test(rt(e))
+            ) && (lt(e) || z(e) ? ne : w).test(rt(e))
           );
         }
         function Ue(e) {
@@ -60259,7 +59478,7 @@
                               return (
                                 null != e &&
                                 (function (e, t, n) {
-                                  t = Qe(t, e) ? [t] : ze(t);
+                                  t = Qe(t, e) ? [t] : $e(t);
                                   var r,
                                     i = -1,
                                     s = t.length;
@@ -60349,7 +59568,7 @@
             ee.call(e, s) && "constructor" != s && i.push(s);
           return i;
         }
-        function $e(e, t, n) {
+        function ze(e, t, n) {
           var r = -1;
           t = B(t.length ? t : [yt], H(Ue));
           var i = (function (e, t) {
@@ -60389,7 +59608,7 @@
             })(e, t, n);
           });
         }
-        function ze(e) {
+        function $e(e) {
           return ut(e) ? e : tt(e);
         }
         function Ke(e, t) {
@@ -60625,7 +59844,7 @@
             n > 1 && Ye(e, t[0], t[1])
               ? (t = [])
               : n > 2 && Ye(t[0], t[1], t[2]) && (t = [t[0]]),
-            $e(e, Oe(t, 1), [])
+            ze(e, Oe(t, 1), [])
           );
         });
         function st(e, t) {
@@ -61882,8 +61101,8 @@
           j = L.call(P, Array.prototype.concat),
           U = L.call(_, Array.prototype.splice),
           H = L.call(P, String.prototype.replace),
-          $ = L.call(P, String.prototype.slice),
-          z = L.call(P, RegExp.prototype.exec),
+          z = L.call(P, String.prototype.slice),
+          $ = L.call(P, RegExp.prototype.exec),
           K =
             /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g,
           G = /\\(\\)?/g,
@@ -61907,13 +61126,13 @@
             throw new l("intrinsic name must be a non-empty string");
           if (arguments.length > 1 && "boolean" != typeof t)
             throw new l('"allowMissing" argument must be a boolean');
-          if (null === z(/^%?[^%]*%?$/, e))
+          if (null === $(/^%?[^%]*%?$/, e))
             throw new c(
               "`%` may not be present anywhere but at the beginning and end of the intrinsic name",
             );
           var n = (function (e) {
-              var t = $(e, 0, 1),
-                n = $(e, -1);
+              var t = z(e, 0, 1),
+                n = z(e, -1);
               if ("%" === t && "%" !== n)
                 throw new c("invalid intrinsic syntax, expected closing `%`");
               if ("%" === n && "%" !== t)
@@ -61935,8 +61154,8 @@
           u && ((r = u[0]), U(n, j([0, 1], u)));
           for (var p = 1, h = !0; p < n.length; p += 1) {
             var d = n[p],
-              f = $(d, 0, 1),
-              m = $(d, -1);
+              f = z(d, 0, 1),
+              m = z(d, -1);
             if (
               ('"' === f ||
                 "'" === f ||
@@ -62618,17 +61837,6 @@
             (this.wordBoundary = null != t.wordBoundary && t.wordBoundary));
         };
         t.Options = n;
-      },
-      76465(e, t, n) {
-        "use strict";
-        var r = a(n(12494)),
-          i = a(n(21067)),
-          s = a(n(32042)),
-          o = a(n(36376));
-        function a(e) {
-          return e && e.__esModule ? e : { default: e };
-        }
-        (a(n(7504)).default, o.default, s.default, r.default, i.default);
       },
       76490(e, t, n) {
         "use strict";
@@ -64246,12 +63454,12 @@
                         y = g[0],
                         x = g[1];
                       if ("object" === s(y) && null !== y) {
-                        if (!$(o, e, y, x, n, i)) return !1;
+                        if (!z(o, e, y, x, n, i)) return !1;
                       } else if (
                         !(
                           n ||
                           (e.has(y) && R(e.get(y), x, !1, i)) ||
-                          $(o, e, y, x, !1, i)
+                          z(o, e, y, x, !1, i)
                         )
                       )
                         return !1;
@@ -64318,7 +63526,7 @@
             R(r, o, !1, i)
           );
         }
-        function $(e, t, n, r, i, s) {
+        function z(e, t, n, r, i, s) {
           for (var o = a(e), u = 0; u < o.length; u++) {
             var c = o[u];
             if (R(n, c, i, s) && R(r, t.get(c), i, s)) return (e.delete(c), !0);
@@ -66669,68 +65877,6 @@
             plugin: "textlint-plugin-",
           }));
       },
-      92222(e, t, n) {
-        "use strict";
-        var r =
-          (this && this.__importDefault) ||
-          function (e) {
-            return e && e.__esModule ? e : { default: e };
-          };
-        (Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.matchPatterns = t.createRegExp = void 0));
-        var i = r(n(90879)),
-          s = r(n(28455)),
-          o = r(n(68479)),
-          a = r(n(52834)),
-          u = n(32137),
-          c = "ug";
-        t.createRegExp = function (e, t) {
-          if ((void 0 === t && (t = c), 0 === e.length))
-            throw new Error("Empty string can not handled");
-          if ((0, u.isRegExpString)(e)) {
-            var n = (0, u.parseRegExpString)(e);
-            if (n)
-              return new RegExp(
-                n.source,
-                0 === (r = n.flagString).length
-                  ? c
-                  : (0, i.default)((r + c).split("")).join(""),
-              );
-            throw new Error('"'.concat(e, '" can not parse as RegExp.'));
-          }
-          return new RegExp((0, a.default)(e), t);
-          var r;
-        };
-        var l = function (e, t) {
-          return (
-            e.startIndex === t.startIndex &&
-            e.endIndex === t.endIndex &&
-            e.match === t.match
-          );
-        };
-        t.matchPatterns = function (e, n) {
-          var r = [];
-          n.map(function (e) {
-            return (0, t.createRegExp)(e);
-          }).forEach(function (t) {
-            var n = e.matchAll(t);
-            Array.from(n).forEach(function (e) {
-              if (void 0 !== e.index) {
-                var t = e[0],
-                  n = e.index;
-                r.push({
-                  match: t,
-                  captures: e.slice(1),
-                  startIndex: n,
-                  endIndex: n + t.length,
-                });
-              }
-            });
-          });
-          var i = (0, s.default)(r, l);
-          return (0, o.default)(i, ["startIndex", "endIndex"]);
-        };
-      },
       92413(e, t, n) {
         "use strict";
         (Object.defineProperty(t, "__esModule", { value: !0 }),
@@ -68872,7 +68018,7 @@
               (o.push(null), (r = e.input.charCodeAt(e.position)));
             else if (
               ((n = e.line),
-              z(e, t, 3, !1, !0),
+              $(e, t, 3, !1, !0),
               o.push(e.result),
               L(e, !0, -1),
               (r = e.input.charCodeAt(e.position)),
@@ -68945,7 +68091,7 @@
             !0
           );
         }
-        function $(e) {
+        function z(e) {
           var t, n;
           if (38 !== (n = e.input.charCodeAt(e.position))) return !1;
           for (
@@ -68965,7 +68111,7 @@
             !0
           );
         }
-        function z(e, t, n, i, s) {
+        function $(e, t, n, i, s) {
           var o,
             a,
             c,
@@ -68994,7 +68140,7 @@
                   : e.lineIndent < t && (T = -1)),
             1 === T)
           )
-            for (; H(e) || $(e); )
+            for (; H(e) || z(e); )
               L(e, !0, -1)
                 ? ((A = !0),
                   (c = o),
@@ -69038,7 +68184,7 @@
                             (o = e.position),
                             (63 !== a && 58 !== a) || !y(r))
                           ) {
-                            if (!z(e, n, 2, !1, !0)) break;
+                            if (!$(e, n, 2, !1, !0)) break;
                             if (e.line === s) {
                               for (a = e.input.charCodeAt(e.position); g(a); )
                                 a = e.input.charCodeAt(++e.position);
@@ -69088,7 +68234,7 @@
                               (a = r));
                           if (
                             ((e.line === s || e.lineIndent > t) &&
-                              (z(e, t, 4, !0, i) &&
+                              ($(e, t, 4, !0, i) &&
                                 (m ? (d = e.result) : (f = e.result)),
                               m ||
                                 (R(e, l, p, h, d, f, s, o), (h = d = f = null)),
@@ -69155,7 +68301,7 @@
                           y(e.input.charCodeAt(e.position + 1)) &&
                           ((s = o = !0), e.position++, L(e, !0, t)),
                         (n = e.line),
-                        z(e, t, 1, !1, !0),
+                        $(e, t, 1, !1, !0),
                         (c = e.tag),
                         (u = e.result),
                         L(e, !0, t),
@@ -69165,7 +68311,7 @@
                           ((s = !0),
                           (p = e.input.charCodeAt(++e.position)),
                           L(e, !0, t),
-                          z(e, t, 1, !1, !0),
+                          $(e, t, 1, !1, !0),
                           (l = e.result)),
                         a
                           ? R(e, r, m, c, u, l)
@@ -69583,7 +68729,7 @@
             45 === e.input.charCodeAt(e.position + 2)
               ? ((e.position += 3), L(e, !0, -1))
               : o && P(e, "directives end mark is expected"),
-            z(e, e.lineIndent - 1, 4, !1, !0),
+            $(e, e.lineIndent - 1, 4, !1, !0),
             L(e, !0, -1),
             e.checkLineBreaks &&
               l.test(e.input.slice(s, e.position)) &&
@@ -70635,84 +69781,78 @@
       s = n(65227),
       o = n(294),
       a = n(63427),
-      u = n(76465),
-      c = n(84902),
-      l = n(50076),
-      p = n(96763);
-    const h = s.rules["sentence-length"],
-      d = s.rules["max-comma"],
-      f = s.rules["max-ten"],
-      m = s.rules["max-kanji-continuous-len"],
-      g = s.rules["no-mix-dearu-desumasu"],
-      y = s.rules["ja-no-mixed-period"],
-      x = s.rules["arabic-kanji-numbers"],
-      E = s.rules["no-doubled-conjunction"],
-      v = s.rules["no-doubled-conjunctive-particle-ga"],
-      D = s.rules["no-double-negative-ja"],
-      T = s.rules["no-doubled-joshi"],
-      b = s.rules["no-dropping-the-ra"],
-      A = s.rules["no-nfd"],
-      C = s.rules["no-exclamation-question-mark"],
-      S = s.rules["no-hankaku-kana"],
-      w = s.rules["no-invalid-control-character"],
-      k = s.rules["ja-no-weak-phrase"],
-      _ = s.rules["ja-no-successive-word"],
-      P = s.rules["ja-no-abusage"],
-      F = s.rules["ja-no-redundant-expression"],
-      I = s.rules["ja-unnatural-alphabet"],
-      N = s.rules["no-unmatched-pair"],
-      O = s.rules["no-zero-width-spaces"],
-      R = o.rules["ja-nakaguro-or-halfwidth-space-between-katakana"],
-      M = o.rules["ja-no-space-around-parentheses"],
-      L = o.rules["ja-no-space-between-full-width"],
-      B = o.rules["ja-space-between-half-and-full-width"],
-      j = o.rules["ja-space-after-exclamation"],
-      U = o.rules["ja-space-after-question"],
-      H = o.rules["ja-space-around-code"],
-      $ = o.rules["ja-space-around-link"],
+      u = n(84902),
+      c = n(50076),
+      l = n(96763);
+    const p = s.rules["sentence-length"],
+      h = s.rules["max-comma"],
+      d = s.rules["max-ten"],
+      f = s.rules["max-kanji-continuous-len"],
+      m = s.rules["no-mix-dearu-desumasu"],
+      g = s.rules["ja-no-mixed-period"],
+      y = s.rules["arabic-kanji-numbers"],
+      x = s.rules["no-doubled-conjunction"],
+      E = s.rules["no-doubled-conjunctive-particle-ga"],
+      v = s.rules["no-double-negative-ja"],
+      D = s.rules["no-doubled-joshi"],
+      T = s.rules["no-dropping-the-ra"],
+      b = s.rules["no-nfd"],
+      A = s.rules["no-exclamation-question-mark"],
+      C = s.rules["no-hankaku-kana"],
+      S = s.rules["no-invalid-control-character"],
+      w = s.rules["ja-no-weak-phrase"],
+      k = s.rules["ja-no-successive-word"],
+      _ = s.rules["ja-no-abusage"],
+      P = s.rules["ja-no-redundant-expression"],
+      F = s.rules["ja-unnatural-alphabet"],
+      I = s.rules["no-unmatched-pair"],
+      N = s.rules["no-zero-width-spaces"],
+      O = o.rules["ja-nakaguro-or-halfwidth-space-between-katakana"],
+      R = o.rules["ja-no-space-around-parentheses"],
+      M = o.rules["ja-no-space-between-full-width"],
+      L = o.rules["ja-space-between-half-and-full-width"],
+      B = o.rules["ja-space-after-exclamation"],
+      j = o.rules["ja-space-after-question"],
+      U = o.rules["ja-space-around-code"],
+      H = o.rules["ja-space-around-link"],
       z = a.rules["max-ten"],
-      K = a.rules["no-doubled-conjunctive-particle-ga"],
-      G = a.rules["no-doubled-conjunction"],
-      q = a.rules["no-double-negative-ja"],
-      V = a.rules["no-doubled-joshi"],
-      W = a.rules["sentence-length"],
-      X = a.rules["no-dropping-the-ra"],
-      J = a.rules["no-mix-dearu-desumasu"],
-      Y = a.rules["no-nfd"],
-      Q = a.rules["no-invalid-control-character"],
-      Z = a.rules["no-zero-width-spaces"],
-      ee = a.rules["no-kangxi-radicals"],
-      te = u.rules["no-ai-list-formatting"],
-      ne = u.rules["no-ai-hype-expressions"],
-      re = u.rules["no-ai-emphasis-patterns"],
-      ie = u.rules["ai-tech-writing-guideline"],
-      se = u.rules["no-ai-colon-continuation"],
-      oe = new e.OR(),
-      ae = {
+      $ = a.rules["no-doubled-conjunctive-particle-ga"],
+      K = a.rules["no-doubled-conjunction"],
+      G = a.rules["no-double-negative-ja"],
+      q = a.rules["no-doubled-joshi"],
+      V = a.rules["sentence-length"],
+      W = a.rules["no-dropping-the-ra"],
+      X = a.rules["no-mix-dearu-desumasu"],
+      J = a.rules["no-nfd"],
+      Y = a.rules["no-invalid-control-character"],
+      Q = a.rules["no-zero-width-spaces"],
+      Z = a.rules["no-kangxi-radicals"],
+      ee = new e.OR(),
+      te = {
         rules: [
           {
             ruleId: "ja-technical-writing/sentence-length",
-            rule: (0, t.i)(h),
+            rule: (0, t.i)(p),
             options: { max: 100 },
           },
           {
             ruleId: "ja-technical-writing/max-comma",
-            rule: (0, t.i)(d),
+            rule: (0, t.i)(h),
             options: { max: 3 },
           },
           {
             ruleId: "ja-technical-writing/max-ten",
-            rule: (0, t.i)(f),
+            rule: (0, t.i)(d),
             options: { max: 3 },
           },
           {
             ruleId: "ja-technical-writing/max-kanji-continuous-len",
-            rule: (0, t.i)(m),
+            rule: (0, t.i)(f),
             options: { max: 6 },
           },
           {
             ruleId: "ja-technical-writing/no-mix-dearu-desumasu",
-            rule: (0, t.i)(g),
+            rule: (0, t.i)(m),
             options: {
               preferInHeader: "",
               preferInBody: "ですます",
@@ -70722,133 +69862,133 @@
           },
           {
             ruleId: "ja-technical-writing/ja-no-mixed-period",
-            rule: (0, t.i)(y),
+            rule: (0, t.i)(g),
             options: { periodMark: "。" },
           },
           {
             ruleId: "ja-technical-writing/arabic-kanji-numbers",
-            rule: (0, t.i)(x),
+            rule: (0, t.i)(y),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-doubled-conjunction",
-            rule: (0, t.i)(E),
+            rule: (0, t.i)(x),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-doubled-conjunctive-particle-ga",
-            rule: (0, t.i)(v),
+            rule: (0, t.i)(E),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-double-negative-ja",
-            rule: (0, t.i)(D),
+            rule: (0, t.i)(v),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-doubled-joshi",
-            rule: (0, t.i)(T),
+            rule: (0, t.i)(D),
             options: { min_interval: 1 },
           },
           {
             ruleId: "ja-technical-writing/no-dropping-the-ra",
-            rule: (0, t.i)(b),
+            rule: (0, t.i)(T),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-nfd",
-            rule: (0, t.i)(A),
+            rule: (0, t.i)(b),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-exclamation-question-mark",
-            rule: (0, t.i)(C),
+            rule: (0, t.i)(A),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-hankaku-kana",
-            rule: (0, t.i)(S),
+            rule: (0, t.i)(C),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-invalid-control-character",
-            rule: (0, t.i)(w),
+            rule: (0, t.i)(S),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/ja-no-weak-phrase",
-            rule: (0, t.i)(k),
+            rule: (0, t.i)(w),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/ja-no-successive-word",
-            rule: (0, t.i)(_),
+            rule: (0, t.i)(k),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/ja-no-abusage",
-            rule: (0, t.i)(P),
+            rule: (0, t.i)(_),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/ja-no-redundant-expression",
-            rule: (0, t.i)(F),
+            rule: (0, t.i)(P),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/ja-unnatural-alphabet",
-            rule: (0, t.i)(I),
+            rule: (0, t.i)(F),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-unmatched-pair",
-            rule: (0, t.i)(N),
+            rule: (0, t.i)(I),
             options: !0,
           },
           {
             ruleId: "ja-technical-writing/no-zero-width-spaces",
-            rule: (0, t.i)(O),
+            rule: (0, t.i)(N),
             options: !0,
           },
           {
             ruleId:
               "ja-spacing/ja-nakaguro-or-halfwidth-space-between-katakana",
-            rule: (0, t.i)(R),
+            rule: (0, t.i)(O),
             options: !0,
           },
           {
             ruleId: "ja-spacing/ja-no-space-around-parentheses",
-            rule: (0, t.i)(M),
+            rule: (0, t.i)(R),
             options: !0,
           },
           {
             ruleId: "ja-spacing/ja-no-space-between-full-width",
-            rule: (0, t.i)(L),
+            rule: (0, t.i)(M),
             options: !0,
           },
           {
             ruleId: "ja-spacing/ja-space-between-half-and-full-width",
-            rule: (0, t.i)(B),
+            rule: (0, t.i)(L),
             options: { space: "never" },
           },
           {
             ruleId: "ja-spacing/ja-space-after-exclamation",
-            rule: (0, t.i)(j),
+            rule: (0, t.i)(B),
             options: !0,
           },
           {
             ruleId: "ja-spacing/ja-space-after-question",
-            rule: (0, t.i)(U),
+            rule: (0, t.i)(j),
             options: !0,
           },
           {
             ruleId: "ja-spacing/ja-space-around-code",
-            rule: (0, t.i)(H),
+            rule: (0, t.i)(U),
             options: !1,
           },
           {
             ruleId: "ja-spacing/ja-space-around-link",
-            rule: (0, t.i)($),
+            rule: (0, t.i)(H),
             options: !1,
           },
           {
@@ -70858,85 +69998,60 @@
           },
           {
             ruleId: "japanese/no-doubled-conjunctive-particle-ga",
-            rule: (0, t.i)(K),
+            rule: (0, t.i)($),
             options: !0,
           },
           {
             ruleId: "japanese/no-doubled-conjunction",
-            rule: (0, t.i)(G),
+            rule: (0, t.i)(K),
             options: !0,
           },
           {
             ruleId: "japanese/no-double-negative-ja",
-            rule: (0, t.i)(q),
+            rule: (0, t.i)(G),
             options: !0,
           },
           {
             ruleId: "japanese/no-doubled-joshi",
-            rule: (0, t.i)(V),
+            rule: (0, t.i)(q),
             options: { min_interval: 1 },
           },
           {
             ruleId: "japanese/sentence-length",
-            rule: (0, t.i)(W),
+            rule: (0, t.i)(V),
             options: { max: 100 },
           },
           {
             ruleId: "japanese/no-dropping-the-ra",
-            rule: (0, t.i)(X),
+            rule: (0, t.i)(W),
             options: !0,
           },
           {
             ruleId: "japanese/no-mix-dearu-desumasu",
-            rule: (0, t.i)(J),
+            rule: (0, t.i)(X),
             options: !0,
           },
-          { ruleId: "japanese/no-nfd", rule: (0, t.i)(Y), options: !0 },
+          { ruleId: "japanese/no-nfd", rule: (0, t.i)(J), options: !0 },
           {
             ruleId: "japanese/no-invalid-control-character",
-            rule: (0, t.i)(Q),
+            rule: (0, t.i)(Y),
             options: !0,
           },
           {
             ruleId: "japanese/no-zero-width-spaces",
-            rule: (0, t.i)(Z),
+            rule: (0, t.i)(Q),
             options: !0,
           },
           {
             ruleId: "japanese/no-kangxi-radicals",
-            rule: (0, t.i)(ee),
-            options: !0,
-          },
-          {
-            ruleId: "@textlint-ja/ai-writing/no-ai-list-formatting",
-            rule: (0, t.i)(te),
-            options: !0,
-          },
-          {
-            ruleId: "@textlint-ja/ai-writing/no-ai-hype-expressions",
-            rule: (0, t.i)(ne),
-            options: !0,
-          },
-          {
-            ruleId: "@textlint-ja/ai-writing/no-ai-emphasis-patterns",
-            rule: (0, t.i)(re),
-            options: !0,
-          },
-          {
-            ruleId: "@textlint-ja/ai-writing/ai-tech-writing-guideline",
-            rule: (0, t.i)(ie),
-            options: { severity: "info" },
-          },
-          {
-            ruleId: "@textlint-ja/ai-writing/no-ai-colon-continuation",
-            rule: (0, t.i)(se),
+            rule: (0, t.i)(Z),
             options: !0,
           },
         ],
         filterRules: [],
         plugins: [
-          { pluginId: "@textlint/text", plugin: (0, t.i)(c), options: !0 },
-          { pluginId: "@textlint/markdown", plugin: (0, t.i)(l), options: !0 },
+          { pluginId: "@textlint/text", plugin: (0, t.i)(u), options: !0 },
+          { pluginId: "@textlint/markdown", plugin: (0, t.i)(c), options: !0 },
         ],
       };
     (self.addEventListener("error", (e) => {
@@ -70957,34 +70072,34 @@
         const t = e.data,
           n =
             void 0 === t.ruleId
-              ? ae.rules
-              : ae.rules.filter((e) => e.ruleId === t.ruleId);
+              ? te.rules
+              : te.rules.filter((e) => e.ruleId === t.ruleId);
         switch (t.command) {
           case "merge-config":
             return ((e) => {
               const t = (0, i.W)(e);
               (t.rules &&
-                (ae.rules = ae.rules.map((e) => {
+                (te.rules = te.rules.map((e) => {
                   const n = t.rules.find((t) => t.ruleId === e.ruleId);
                   return { ...e, ...n };
                 })),
                 t.filterRules &&
-                  (ae.filterRules = ae.filterRules.map((e) => {
+                  (te.filterRules = te.filterRules.map((e) => {
                     const n = t.filterRules.find((t) => t.ruleId === e.ruleId);
                     return { ...e, ...n };
                   })),
                 t.plugins &&
-                  (ae.plugins = ae.plugins.map((e) => {
+                  (te.plugins = te.plugins.map((e) => {
                     const n = t.plugins.find((t) => t.pluginId === e.pluginId);
                     return { ...e, ...n };
                   })));
             })(t.textlintrc);
           case "lint":
-            return oe
+            return ee
               .lintText(t.text, {
                 rules: n,
-                filterRules: ae.filterRules,
-                plugins: ae.plugins,
+                filterRules: te.filterRules,
+                plugins: te.plugins,
                 filePath: "/path/to/README" + t.ext,
                 ext: t.ext,
               })
@@ -71003,11 +70118,11 @@
                 }),
               );
           case "fix":
-            return oe
+            return ee
               .fixText(t.text, {
                 rules: n,
-                filterRules: ae.filterRules,
-                plugins: ae.plugins,
+                filterRules: te.filterRules,
+                plugins: te.plugins,
                 filePath: "/path/to/README" + t.ext,
                 ext: t.ext,
               })
@@ -71022,7 +70137,7 @@
                 self.postMessage({ id: t.id, command: "error", error: e }),
               );
           default:
-            p.log("Unknown command: " + t.command);
+            l.log("Unknown command: " + t.command);
         }
       }),
       self.postMessage({
@@ -71037,7 +70152,6 @@
               "preset-ja-technical-writing": !0,
               "preset-ja-spacing": !0,
               "preset-japanese": !0,
-              "@textlint-ja/preset-ai-writing": !0,
             },
             plugins: { "@textlint/text": !0, "@textlint/markdown": !0 },
           },

@@ -47,7 +47,7 @@ export class TextlintWorker {
     const timer = setTimeout(() => {
       this._listeners.delete(id);
       reject(new Error("TextlintWorker: Linting timed out"));
-    }, 10_000);
+    }, 60_000);
 
     this._listeners.set(id, (results) => {
       clearTimeout(timer);
