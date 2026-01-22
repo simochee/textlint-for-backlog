@@ -7,3 +7,7 @@
 *::highlight(textlint-error-active) {
   background-color: rgba(255, 68, 68, 0.15);
 }
+
+*::highlight(textlint-error-focus) {
+  background-color: rgba(255, 68, 68, 0.3);
+}

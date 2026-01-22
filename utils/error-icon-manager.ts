@@ -1,5 +1,6 @@
 import type { LintResultMessage } from "@/types/textlint";
 import styles from "@/entrypoints/content/style.module.css";
+import { createRangeFromTextOffset } from "./create-range-from-text-offset";
 
 /**
  * エラーアイコンの表示位置を管理し、要素の位置に追従させるクラス
@@ -270,7 +271,7 @@ export class ErrorIconManager {
     }
 
     // 新しいPopoverを作成
-    popover = this.createPopover(errors);
+    popover = this.createPopover(errors, element);
     this.popovers.set(element, popover);
 
     // ツールチップはbodyに直接追加して独立したz-indexを持たせる
@@ -326,33 +327,88 @@ export class ErrorIconManager {
   /**
    * Popover要素を作成
    */
-  private createPopover(errors: LintResultMessage[]): HTMLElement {
+  private createPopover(
+    errors: LintResultMessage[],
+    element: Element,
+  ): HTMLElement {
     const popover = document.createElement("div");
     popover.className = styles.errorPopover;
     popover.style.opacity = "0";
     popover.style.pointerEvents = "none";
 
-    const content = errors
-      .map(
-        (error) => `
-        <div class="${styles.errorItem}">
-          <div class="${styles.errorHeader}">
-            <a href="http://localhost/rules/${error.ruleId}" class="${styles.errorRule}" target="_blank" rel="noopener noreferrer">
-              ${error.ruleId}
-              <svg class="${styles.linkIcon}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 9v5H2V2h5M9 2h5v5M8 8l6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          </div>
-          <div class="${styles.errorMessage}">${error.message}</div>
-        </div>
-      `,
-      )
-      .join("");
+    errors.forEach((error) => {
+      const errorItem = document.createElement("div");
+      errorItem.className = styles.errorItem;
 
-    popover.innerHTML = content;
+      const errorHeader = document.createElement("div");
+      errorHeader.className = styles.errorHeader;
+
+      const errorLink = document.createElement("a");
+      errorLink.href = `http://localhost/rules/${error.ruleId}`;
+      errorLink.className = styles.errorRule;
+      errorLink.target = "_blank";
+      errorLink.rel = "noopener noreferrer";
+      errorLink.textContent = error.ruleId;
+
+      const linkIcon = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      linkIcon.setAttribute("class", styles.linkIcon);
+      linkIcon.setAttribute("viewBox", "0 0 16 16");
+      linkIcon.setAttribute("fill", "none");
+
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path.setAttribute("d", "M14 9v5H2V2h5M9 2h5v5M8 8l6-6");
+      path.setAttribute("stroke", "currentColor");
+      path.setAttribute("stroke-width", "1.5");
+      path.setAttribute("stroke-linecap", "round");
+      path.setAttribute("stroke-linejoin", "round");
+
+      linkIcon.appendChild(path);
+      errorLink.appendChild(linkIcon);
+      errorHeader.appendChild(errorLink);
+
+      const errorMessage = document.createElement("div");
+      errorMessage.className = styles.errorMessage;
+      errorMessage.textContent = error.message;
+
+      errorItem.appendChild(errorHeader);
+      errorItem.appendChild(errorMessage);
+
+      // ホバー時にハイライトを表示
+      errorItem.addEventListener("mouseenter", () => {
+        this.setFocusHighlight(element, error.range);
+      });
+
+      errorItem.addEventListener("mouseleave", () => {
+        this.clearFocusHighlight();
+      });
+
+      popover.appendChild(errorItem);
+    });
 
     return popover;
+  }
+
+  /**
+   * 特定のエラー範囲にフォーカスハイライトを設定
+   */
+  private setFocusHighlight(element: Element, range: [number, number]): void {
+    const [start, end] = range;
+    const domRange = createRangeFromTextOffset(element, start, end);
+    const highlight = new Highlight(domRange);
+    CSS.highlights.set("textlint-error-focus", highlight);
+  }
+
+  /**
+   * フォーカスハイライトをクリア
+   */
+  private clearFocusHighlight(): void {
+    CSS.highlights.delete("textlint-error-focus");
   }
 
   /**
