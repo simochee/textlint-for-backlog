@@ -6,5 +6,6 @@ export default defineConfig({
     name: "Textlint for Backlog",
     description: pkg.description,
     version: pkg.version,
+    permissions: ["storage"],
   },
 });
