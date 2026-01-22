@@ -2,6 +2,7 @@
   "rules": {
     "preset-ja-technical-writing": true,
     "preset-ja-spacing": true,
-    "preset-japanese": true
+    "preset-japanese": true,
+    "@textlint-ja/no-synonyms": true
   }
 }
