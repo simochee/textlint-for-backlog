@@ -3,25 +3,34 @@ import type { LintResultMessage } from "@/types/textlint";
 import { createRangeFromTextOffset } from "./create-range-from-text-offset";
 
 /**
+ * Lint結果
+ */
+export interface LintResult {
+  ranges: Range[];
+  messages: LintResultMessage[];
+}
+
+/**
  * Lint実行とRange生成を担当するクラス
  */
 export class LintExecutor {
   constructor(private textlint: TextlintWorker) {}
 
   /**
-   * 指定された要素に対してlintを実行し、エラー箇所のRangeを生成する
+   * 指定された要素に対してlintを実行し、エラー箇所のRangeとメッセージを生成する
    *
    * @param id - 要素の一意なID
    * @param element - lint対象のDOM要素
-   * @returns エラー箇所を示すRangeの配列
+   * @returns エラー箇所を示すRangeとメッセージ
    */
-  public async execute(id: string, element: HTMLElement): Promise<Range[]> {
+  public async execute(id: string, element: HTMLElement): Promise<LintResult> {
     try {
       const results = await this.textlint.lint(id, element.innerText);
-      return this.createRangesFromResults(element, results);
+      const ranges = this.createRangesFromResults(element, results);
+      return { ranges, messages: results };
     } catch (error) {
       console.error(`[LintExecutor] Lint failed for element ${id}:`, error);
-      return [];
+      return { ranges: [], messages: [] };
     }
   }
 

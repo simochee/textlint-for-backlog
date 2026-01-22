@@ -67,12 +67,15 @@ export class ElementWatcher {
    * Lintを実行してハイライトを更新する
    */
   private async runLint(): Promise<void> {
-    const ranges = await this.lintExecutor.execute(this.id, this.element);
+    const { ranges, messages } = await this.lintExecutor.execute(
+      this.id,
+      this.element,
+    );
     this.highlightManager.setRanges(this.id, ranges);
 
     // エラーがある場合はアイコンを表示、ない場合は非表示
     if (ranges.length > 0) {
-      this.errorIconManager.showIcon(this.element, ranges.length);
+      this.errorIconManager.showIcon(this.element, messages);
     } else {
       this.errorIconManager.hideIcon(this.element);
     }

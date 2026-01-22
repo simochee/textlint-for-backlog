@@ -1,8 +1,12 @@
+import type { LintResultMessage } from "@/types/textlint";
+
 /**
  * エラーアイコンの表示位置を管理し、要素の位置に追従させるクラス
  */
 export class ErrorIconManager {
   private icons = new WeakMap<Element, HTMLElement>();
+  private errors = new WeakMap<Element, LintResultMessage[]>(); // エラー情報を保存
+  private popovers = new WeakMap<Element, HTMLElement>(); // Popover要素を保存
   private elements = new Set<Element>(); // アクティブな要素を追跡
   private container: HTMLElement | null = null;
   private resizeObserver: ResizeObserver;
@@ -55,23 +59,31 @@ export class ErrorIconManager {
   /**
    * 要素にエラーアイコンを表示
    */
-  showIcon(element: Element, errorCount: number = 1): void {
+  showIcon(element: Element, errors: LintResultMessage[]): void {
     // コンテナが未初期化の場合は初期化
     this.initializeContainer();
+
+    // エラー情報を保存
+    this.errors.set(element, errors);
 
     if (this.icons.has(element)) {
       // 既存のアイコンを更新
       const icon = this.icons.get(element)!;
-      this.updateIconContent(icon, errorCount);
+      this.updateIconContent(icon, errors.length);
       this.updateIconPosition(element);
       icon.style.display = "block";
       return;
     }
 
     // 新しいアイコンを作成
-    const icon = this.createIcon(errorCount);
+    const iconId = this.generateIconId();
+    const icon = this.createIcon(errors.length, iconId);
     this.icons.set(element, icon);
     this.elements.add(element); // 要素を追跡
+
+    // クリックイベントを設定
+    icon.addEventListener("click", () => this.handleIconClick(element, icon));
+
     this.container?.appendChild(icon);
 
     // 位置を更新
@@ -96,12 +108,21 @@ export class ErrorIconManager {
    */
   removeIcon(element: Element): void {
     const icon = this.icons.get(element);
+    const popover = this.popovers.get(element);
+
     if (icon) {
       icon.remove();
       this.icons.delete(element);
       this.elements.delete(element); // 要素の追跡を停止
       this.resizeObserver.unobserve(element);
     }
+
+    if (popover) {
+      popover.remove();
+      this.popovers.delete(element);
+    }
+
+    this.errors.delete(element);
   }
 
   /**
@@ -117,11 +138,19 @@ export class ErrorIconManager {
   /**
    * エラーアイコン要素を作成
    */
-  private createIcon(errorCount: number): HTMLElement {
+  private createIcon(errorCount: number, id: string): HTMLElement {
     const icon = document.createElement("div");
+    icon.id = id;
     icon.className = "textlint-error-icon";
     this.updateIconContent(icon, errorCount);
     return icon;
+  }
+
+  /**
+   * アイコン用のユニークIDを生成
+   */
+  private generateIconId(): string {
+    return `textlint-icon-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   }
 
   /**
@@ -186,6 +215,109 @@ export class ErrorIconManager {
     // アクティブな要素の位置を更新
     this.elements.forEach((element) => {
       this.updateIconPosition(element);
+
+      // 開いているPopoverの位置も更新
+      const popover = this.popovers.get(element);
+      const icon = this.icons.get(element);
+      if (popover && icon && popover.style.display !== "none") {
+        this.updatePopoverPosition(popover, icon);
+      }
     });
+  }
+
+  /**
+   * アイコンクリック時の処理
+   */
+  private handleIconClick(element: Element, icon: HTMLElement): void {
+    const errors = this.errors.get(element);
+    if (!errors) return;
+
+    // 既存のPopoverがあればトグル
+    let popover = this.popovers.get(element);
+    if (popover) {
+      if (popover.style.display === "none") {
+        this.updatePopoverPosition(popover, icon);
+        popover.style.display = "block";
+      } else {
+        popover.style.display = "none";
+      }
+      return;
+    }
+
+    // 新しいPopoverを作成
+    popover = this.createPopover(errors);
+    this.popovers.set(element, popover);
+
+    // ツールチップはbodyに直接追加して独立したz-indexを持たせる
+    document.body.appendChild(popover);
+    this.updatePopoverPosition(popover, icon);
+    popover.style.display = "block";
+
+    // 他の場所をクリックしたら閉じる
+    const closeHandler = (e: MouseEvent) => {
+      if (
+        !popover.contains(e.target as Node) &&
+        !icon.contains(e.target as Node)
+      ) {
+        popover.style.display = "none";
+        document.removeEventListener("click", closeHandler);
+      }
+    };
+    // 少し遅延させてから登録（即座に閉じるのを防ぐ）
+    setTimeout(() => {
+      document.addEventListener("click", closeHandler);
+    }, 0);
+  }
+
+  /**
+   * Popover要素を作成
+   */
+  private createPopover(errors: LintResultMessage[]): HTMLElement {
+    const popover = document.createElement("div");
+    popover.className = "textlint-error-popover";
+    popover.style.display = "none";
+
+    const content = errors
+      .map(
+        (error, index) => `
+        <div class="textlint-error-item">
+          <div class="textlint-error-header">
+            <span class="textlint-error-number">${index + 1}</span>
+            <span class="textlint-error-rule">${error.ruleId}</span>
+          </div>
+          <div class="textlint-error-message">${error.message}</div>
+        </div>
+      `,
+      )
+      .join("");
+
+    popover.innerHTML = `
+      <div class="textlint-error-popover-header">
+        <span class="textlint-error-count">${errors.length}件のエラー</span>
+      </div>
+      <div class="textlint-error-list">
+        ${content}
+      </div>
+    `;
+
+    return popover;
+  }
+
+  /**
+   * Popoverの位置をアイコンの位置に基づいて更新
+   */
+  private updatePopoverPosition(popover: HTMLElement, icon: HTMLElement): void {
+    const iconRect = icon.getBoundingClientRect();
+
+    // アイコンの右端を基準に、ツールチップを上側・左側に配置
+    // ツールチップの右端がアイコンの中央あたりに来るように調整
+    const right = window.innerWidth - iconRect.right + iconRect.width / 2;
+    const bottom = window.innerHeight - iconRect.top + 8;
+
+    popover.style.right = `${right}px`;
+    popover.style.bottom = `${bottom}px`;
+    popover.style.left = "auto";
+    popover.style.top = "auto";
+    popover.style.transform = "none";
   }
 }
