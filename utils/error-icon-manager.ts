@@ -172,17 +172,30 @@ export class ErrorIconManager {
   }
 
   /**
-   * アイコンの位置を要素の右上外側に更新
+   * アイコンの位置を要素の1行目の上下中央に更新
    */
   private updateIconPosition(element: Element): void {
     const icon = this.icons.get(element);
     if (!icon) return;
 
     const rect = element.getBoundingClientRect();
+    const computedStyle = window.getComputedStyle(element);
 
-    // 要素の右上外側に配置（右に8px、上に8pxのオフセット）
+    // line-heightを取得（normalの場合はfont-sizeの約1.2倍）
+    let lineHeight = parseFloat(computedStyle.lineHeight);
+    if (isNaN(lineHeight) || computedStyle.lineHeight === "normal") {
+      const fontSize = parseFloat(computedStyle.fontSize);
+      lineHeight = fontSize * 1.2;
+    }
+
+    // アイコンのサイズ（20px）
+    const iconSize = 20;
+
+    // 要素の右側に配置（右に8pxのオフセット）
     const left = rect.right + 8;
-    const top = rect.top - 8;
+
+    // 1行目の中央に配置（要素の上端 + 1行目の高さの半分 - アイコンの高さの半分）
+    const top = rect.top + lineHeight / 2 - iconSize / 2;
 
     icon.style.cssText = `
       position: fixed;

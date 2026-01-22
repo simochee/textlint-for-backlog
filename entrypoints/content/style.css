@@ -26,7 +26,8 @@
   margin: 0;
   padding: 0;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  /* 右下の角のみ尖らせて吹き出し風に */
+  border-radius: 8px 8px 0 8px;
   background: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: 400px;
@@ -44,33 +45,6 @@
   /* フェードアニメーション */
   opacity: 0;
   transition: opacity 0.2s;
-}
-
-/* ツールチップの下向き三角形(▼) */
-.textlint-error-popover::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  right: 8px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid white;
-  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
-}
-
-/* 三角形の枠線 */
-.textlint-error-popover::before {
-  content: "";
-  position: absolute;
-  bottom: -9px;
-  right: 8px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #e0e0e0;
 }
 
 .textlint-error-popover-header {
