@@ -25,6 +25,7 @@
     "@types/webextension-polyfill": "^0.12.4",
     "@vitest/ui": "^4.0.17",
     "@webext-core/fake-browser": "^1.3.4",
+    "@wxt-dev/auto-icons": "^1.1.0",
     "happy-dom": "^20.3.4",
     "lefthook": "^2.0.15",
     "prettier": "^3.8.0",
