@@ -15,25 +15,15 @@
     "valibot": "^1.2.0"
   },
   "devDependencies": {
+    "@textlint-ja/textlint-rule-preset-ai-writing": "^1.6.1",
     "@textlint/script-compiler": "^0.18.5",
     "@tsconfig/vite-react": "^7.0.2",
     "lefthook": "^2.0.15",
     "prettier": "^3.8.0",
     "prettier-plugin-packagejson": "^3.0.0",
-    "textlint-rule-ja-no-abusage": "^3.0.0",
-    "textlint-rule-ja-no-redundant-expression": "^4.0.1",
-    "textlint-rule-ja-no-successive-word": "^2.0.1",
-    "textlint-rule-ja-no-weak-phrase": "^2.0.0",
-    "textlint-rule-max-ten": "^5.0.0",
-    "textlint-rule-no-double-negative-ja": "^2.0.1",
-    "textlint-rule-no-doubled-joshi": "^5.1.1",
-    "textlint-rule-no-dropping-the-ra": "^3.0.0",
-    "textlint-rule-no-mix-dearu-desumasu": "^6.0.4",
-    "textlint-rule-no-nfd": "^2.0.2",
     "textlint-rule-preset-ja-spacing": "^2.4.3",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
-    "textlint-rule-preset-jtf-style": "^3.0.3",
-    "textlint-rule-sentence-length": "^5.2.1",
+    "textlint-rule-preset-japanese": "^10.0.4",
     "wxt": "^0.20.13"
   },
   "namespace": "http://localhost:3000"
