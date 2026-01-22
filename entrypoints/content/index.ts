@@ -3,6 +3,7 @@ import { TextlintWorker } from "./worker";
 import { HighlightManager } from "@/utils/highlight-manager";
 import { LintExecutor } from "@/utils/lint-executor";
 import { ElementWatcher } from "@/utils/element-watcher";
+import { ErrorIconManager } from "@/utils/error-icon-manager";
 import "./style.css";
 
 export default defineContentScript({
@@ -17,6 +18,7 @@ export default defineContentScript({
     // ハイライト管理とLint実行のインスタンスを作成
     const highlightManager = new HighlightManager("textlint-error", 100);
     const lintExecutor = new LintExecutor(textlint);
+    const errorIconManager = new ErrorIconManager();
 
     // 要素の監視を開始
     observeQuerySelector('[contenteditable="true"] > p', (el) => {
@@ -26,6 +28,7 @@ export default defineContentScript({
         id,
         lintExecutor,
         highlightManager,
+        errorIconManager,
       );
 
       watcher.start();

@@ -3,3 +3,20 @@
   text-decoration-style: wavy;
   text-decoration-color: red;
 }
+
+/* エラーアイコンのスタイル */
+.textlint-error-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  z-index: 9999;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition:
+    transform 0.2s,
+    filter 0.2s;
+}
+
+.textlint-error-icon:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
