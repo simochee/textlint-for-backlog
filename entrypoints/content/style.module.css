@@ -44,6 +44,9 @@
   /* スクロールバーのスタイル */
   scrollbar-width: thin;
   scrollbar-color: #d0d0d0 transparent;
+
+  /* スクロールの伝播を防ぐ */
+  overscroll-behavior: contain;
 }
 
 /* WebKitブラウザ用のスクロールバースタイル */
