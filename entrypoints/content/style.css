@@ -40,6 +40,10 @@
   position: fixed;
   pointer-events: auto;
   z-index: 10000;
+
+  /* フェードアニメーション */
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
 /* ツールチップの下向き三角形(▼) */

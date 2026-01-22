@@ -219,7 +219,7 @@ export class ErrorIconManager {
       // 開いているPopoverの位置も更新
       const popover = this.popovers.get(element);
       const icon = this.icons.get(element);
-      if (popover && icon && popover.style.display !== "none") {
+      if (popover && icon && popover.style.opacity !== "0") {
         this.updatePopoverPosition(popover, icon);
       }
     });
@@ -235,11 +235,13 @@ export class ErrorIconManager {
     // 既存のPopoverがあればトグル
     let popover = this.popovers.get(element);
     if (popover) {
-      if (popover.style.display === "none") {
+      if (popover.style.opacity === "0") {
         this.updatePopoverPosition(popover, icon);
-        popover.style.display = "block";
+        popover.style.opacity = "1";
+        popover.style.pointerEvents = "auto";
       } else {
-        popover.style.display = "none";
+        popover.style.opacity = "0";
+        popover.style.pointerEvents = "none";
       }
       return;
     }
@@ -251,7 +253,8 @@ export class ErrorIconManager {
     // ツールチップはbodyに直接追加して独立したz-indexを持たせる
     document.body.appendChild(popover);
     this.updatePopoverPosition(popover, icon);
-    popover.style.display = "block";
+    popover.style.opacity = "1";
+    popover.style.pointerEvents = "auto";
 
     // 他の場所をクリックしたら閉じる
     const closeHandler = (e: MouseEvent) => {
@@ -259,7 +262,8 @@ export class ErrorIconManager {
         !popover.contains(e.target as Node) &&
         !icon.contains(e.target as Node)
       ) {
-        popover.style.display = "none";
+        popover.style.opacity = "0";
+        popover.style.pointerEvents = "none";
         document.removeEventListener("click", closeHandler);
       }
     };
@@ -275,7 +279,8 @@ export class ErrorIconManager {
   private createPopover(errors: LintResultMessage[]): HTMLElement {
     const popover = document.createElement("div");
     popover.className = "textlint-error-popover";
-    popover.style.display = "none";
+    popover.style.opacity = "0";
+    popover.style.pointerEvents = "none";
 
     const content = errors
       .map(
@@ -307,6 +312,13 @@ export class ErrorIconManager {
    * Popoverの位置をアイコンの位置に基づいて更新
    */
   private updatePopoverPosition(popover: HTMLElement, icon: HTMLElement): void {
+    // アイコンが非表示の場合はツールチップも非表示
+    if (icon.style.opacity === "0" || icon.style.display === "none") {
+      popover.style.opacity = "0";
+      popover.style.pointerEvents = "none";
+      return;
+    }
+
     const iconRect = icon.getBoundingClientRect();
 
     // アイコンの右端を基準に、ツールチップを上側・左側に配置
