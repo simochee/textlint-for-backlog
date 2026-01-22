@@ -11,6 +11,7 @@ export class ErrorIconManager {
   private container: HTMLElement | null = null;
   private resizeObserver: ResizeObserver;
   private scrollHandler: () => void;
+  private globalClickHandler: (e: MouseEvent) => void;
 
   constructor() {
     // コンテナ要素を作成（遅延初期化）
@@ -27,6 +28,10 @@ export class ErrorIconManager {
     this.scrollHandler = this.handleScroll.bind(this);
     window.addEventListener("scroll", this.scrollHandler, true);
     window.addEventListener("resize", this.scrollHandler);
+
+    // グローバルクリックハンドラ（ツールチップ以外をクリックしたら閉じる）
+    this.globalClickHandler = this.handleGlobalClick.bind(this);
+    document.addEventListener("click", this.globalClickHandler, true);
   }
 
   /**
@@ -133,6 +138,7 @@ export class ErrorIconManager {
     this.resizeObserver.disconnect();
     window.removeEventListener("scroll", this.scrollHandler, true);
     window.removeEventListener("resize", this.scrollHandler);
+    document.removeEventListener("click", this.globalClickHandler, true);
   }
 
   /**
@@ -255,22 +261,28 @@ export class ErrorIconManager {
     this.updatePopoverPosition(popover, icon);
     popover.style.opacity = "1";
     popover.style.pointerEvents = "auto";
+  }
 
-    // 他の場所をクリックしたら閉じる
-    const closeHandler = (e: MouseEvent) => {
-      if (
-        !popover.contains(e.target as Node) &&
-        !icon.contains(e.target as Node)
-      ) {
-        popover.style.opacity = "0";
-        popover.style.pointerEvents = "none";
-        document.removeEventListener("click", closeHandler);
+  /**
+   * グローバルクリックハンドラー（ツールチップ以外をクリックしたら閉じる）
+   */
+  private handleGlobalClick(e: MouseEvent): void {
+    const target = e.target as Node;
+
+    // すべての開いているツールチップをチェック
+    this.elements.forEach((element) => {
+      const popover = this.popovers.get(element);
+      const icon = this.icons.get(element);
+
+      // ツールチップが開いている場合
+      if (popover && popover.style.opacity !== "0") {
+        // クリックされた場所がツールチップまたはアイコンの内部でない場合、閉じる
+        if (!popover.contains(target) && icon && !icon.contains(target)) {
+          popover.style.opacity = "0";
+          popover.style.pointerEvents = "none";
+        }
       }
-    };
-    // 少し遅延させてから登録（即座に閉じるのを防ぐ）
-    setTimeout(() => {
-      document.addEventListener("click", closeHandler);
-    }, 0);
+    });
   }
 
   /**
