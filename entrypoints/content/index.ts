@@ -4,7 +4,7 @@ import { HighlightManager } from "@/utils/highlight-manager";
 import { LintExecutor } from "@/utils/lint-executor";
 import { ElementWatcher } from "@/utils/element-watcher";
 import { ErrorIconManager } from "@/utils/error-icon-manager";
-import "./style.css";
+import "./global.css";
 
 export default defineContentScript({
   matches: ["https://*.backlog.com/*", "https://*.backlog.jp/*"],

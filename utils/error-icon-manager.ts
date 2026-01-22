@@ -1,4 +1,5 @@
 import type { LintResultMessage } from "@/types/textlint";
+import styles from "@/entrypoints/content/style.module.css";
 
 /**
  * エラーアイコンの表示位置を管理し、要素の位置に追従させるクラス
@@ -147,7 +148,7 @@ export class ErrorIconManager {
   private createIcon(errorCount: number, id: string): HTMLElement {
     const icon = document.createElement("div");
     icon.id = id;
-    icon.className = "textlint-error-icon";
+    icon.className = styles.errorIcon;
     this.updateIconContent(icon, errorCount);
     return icon;
   }
@@ -303,29 +304,29 @@ export class ErrorIconManager {
    */
   private createPopover(errors: LintResultMessage[]): HTMLElement {
     const popover = document.createElement("div");
-    popover.className = "textlint-error-popover";
+    popover.className = styles.errorPopover;
     popover.style.opacity = "0";
     popover.style.pointerEvents = "none";
 
     const content = errors
       .map(
         (error, index) => `
-        <div class="textlint-error-item">
-          <div class="textlint-error-header">
-            <span class="textlint-error-number">${index + 1}</span>
-            <span class="textlint-error-rule">${error.ruleId}</span>
+        <div class="${styles.errorItem}">
+          <div class="${styles.errorHeader}">
+            <span class="${styles.errorNumber}">${index + 1}</span>
+            <span class="${styles.errorRule}">${error.ruleId}</span>
           </div>
-          <div class="textlint-error-message">${error.message}</div>
+          <div class="${styles.errorMessage}">${error.message}</div>
         </div>
       `,
       )
       .join("");
 
     popover.innerHTML = `
-      <div class="textlint-error-popover-header">
-        <span class="textlint-error-count">${errors.length}件のエラー</span>
+      <div class="${styles.popoverHeader}">
+        <span class="${styles.errorCount}">${errors.length}件のエラー</span>
       </div>
-      <div class="textlint-error-list">
+      <div class="${styles.errorList}">
         ${content}
       </div>
     `;
