@@ -5,3 +5,6 @@ __textlint_compier_temp
 .DS_Store
 *.local*
 *.log
+
+# Test coverage
+coverage

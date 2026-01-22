@@ -8,7 +8,11 @@
     "build": "wxt build",
     "compile-textlint": "textlint-script-compiler --output-dir ./vendor",
     "dev": "wxt",
-    "postinstall": "lefthook install && wxt prepare"
+    "postinstall": "lefthook install && wxt prepare",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "debounce": "^3.0.0",
@@ -18,12 +22,17 @@
     "@textlint-ja/textlint-rule-preset-ai-writing": "^1.6.1",
     "@textlint/script-compiler": "^0.18.5",
     "@tsconfig/vite-react": "^7.0.2",
+    "@types/webextension-polyfill": "^0.12.4",
+    "@vitest/ui": "^4.0.17",
+    "@webext-core/fake-browser": "^1.3.4",
+    "happy-dom": "^20.3.4",
     "lefthook": "^2.0.15",
     "prettier": "^3.8.0",
     "prettier-plugin-packagejson": "^3.0.0",
     "textlint-rule-preset-ja-spacing": "^2.4.3",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
     "textlint-rule-preset-japanese": "^10.0.4",
+    "vitest": "^4.0.17",
     "wxt": "^0.20.13"
   },
   "namespace": "http://localhost:3000"
