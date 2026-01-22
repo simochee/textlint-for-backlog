@@ -51,6 +51,13 @@ export class ElementWatcher {
   }
 
   /**
+   * 強制的にlintを再実行する（設定変更時などに使用）
+   */
+  public rerun(): void {
+    void this.runLint();
+  }
+
+  /**
    * MutationObserverを作成する
    */
   private createObserver(): MutationObserver {

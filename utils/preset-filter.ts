@@ -1,39 +1,22 @@
 import type { LintResultMessage } from "@/types/textlint";
-import { PresetSettings } from "./preset-settings";
+import { extractPresetName } from "@/types/presets";
+import { PresetSettingsManager } from "./preset-settings";
 
 /**
- * プリセット設定に基づいてlint結果をフィルタリングするクラス
+ * プリセット設定に基づいてlint結果をフィルタリングする関数
  */
-export class PresetFilter {
-  private presetSettings = new PresetSettings();
+export function filterMessages(
+  messages: LintResultMessage[],
+): LintResultMessage[] {
+  const settings = PresetSettingsManager.getInstance().getCurrent();
 
-  /**
-   * ruleIdからプリセット名を抽出する
-   * 例: "preset-ja-technical-writing/no-exclamation-question-mark" -> "ja-technical-writing"
-   */
-  private extractPresetName(ruleId: string): string | null {
-    const match = ruleId.match(/^([^/]+)/);
-    return match ? match[1] : null;
-  }
+  return messages.filter((message) => {
+    const presetName = extractPresetName(message.ruleId);
 
-  /**
-   * プリセット設定に基づいてエラーをフィルタリングする
-   */
-  async filter(messages: LintResultMessage[]): Promise<LintResultMessage[]> {
-    const settings = await this.presetSettings.load();
+    // プリセットが判別できない場合は表示する（安全側に倒す）
+    if (!presetName) return true;
 
-    return messages.filter((message) => {
-      const presetName = this.extractPresetName(message.ruleId);
-
-      console.log(presetName, message.ruleId);
-
-      // プリセットが判別できない場合は表示する(安全側に倒す)
-      if (!presetName) {
-        return true;
-      }
-
-      // プリセットが無効化されている場合はフィルタリング
-      return settings[presetName] !== false;
-    });
-  }
+    // プリセットが有効な場合のみ表示
+    return settings[presetName] !== false;
+  });
 }

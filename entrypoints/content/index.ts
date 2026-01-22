@@ -4,6 +4,7 @@ import { HighlightManager } from "@/utils/highlight-manager";
 import { LintExecutor } from "@/utils/lint-executor";
 import { ElementWatcher } from "@/utils/element-watcher";
 import { ErrorIconManager } from "@/utils/error-icon-manager";
+import { PresetSettingsManager } from "@/utils/preset-settings";
 import "./global.css";
 
 export default defineContentScript({
@@ -13,12 +14,24 @@ export default defineContentScript({
     const { textlintWorkerUrl } = useAppConfig();
     const textlint = new TextlintWorker(textlintWorkerUrl);
 
+    // プリセット設定を初期化
+    const settingsManager = PresetSettingsManager.getInstance();
+    await settingsManager.load();
+
     await textlint.load();
 
     // ハイライト管理とLint実行のインスタンスを作成
     const highlightManager = new HighlightManager("textlint-error", 100);
     const lintExecutor = new LintExecutor(textlint);
     const errorIconManager = new ErrorIconManager();
+
+    // アクティブな要素ウォッチャーを保存
+    const activeWatchers = new Map<string, ElementWatcher>();
+
+    // プリセット設定変更時に全要素を再チェック
+    settingsManager.addListener(() => {
+      activeWatchers.forEach((watcher) => watcher.rerun());
+    });
 
     // 要素の監視を開始
     observeQuerySelector('[contenteditable="true"] > p', (el) => {
@@ -32,9 +45,11 @@ export default defineContentScript({
       );
 
       watcher.start();
+      activeWatchers.set(id, watcher);
 
       return () => {
         watcher.stop();
+        activeWatchers.delete(id);
       };
     });
   },

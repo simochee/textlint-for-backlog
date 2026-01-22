@@ -1,7 +1,7 @@
 import * as v from "valibot";
 import type { LintResultMessage } from "@/types/textlint";
 import { MessageDataSchema } from "@/types/textlint";
-import { PresetFilter } from "@/utils/preset-filter";
+import { filterMessages } from "@/utils/preset-filter";
 
 export class TextlintWorker {
   private _worker: Worker | undefined;
@@ -10,8 +10,6 @@ export class TextlintWorker {
     string,
     (results: LintResultMessage[] | null) => void
   >();
-
-  private presetFilter = new PresetFilter();
 
   constructor(private workerUrl: string) {}
 
@@ -33,9 +31,7 @@ export class TextlintWorker {
         );
 
         // プリセット設定に基づいてエラーをフィルタリング
-        const filteredMessages = await this.presetFilter.filter(
-          result.messages,
-        );
+        const filteredMessages = filterMessages(result.messages);
 
         this._listeners.get(id)?.(filteredMessages);
       } catch {

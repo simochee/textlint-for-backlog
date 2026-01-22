@@ -1,27 +1,39 @@
 import "./style.css";
-import { PresetSettings } from "@/utils/preset-settings";
+import { PresetSettingsManager } from "@/utils/preset-settings";
+import { PRESETS, PRESET_LABELS } from "@/types/presets";
 
-const presetSettings = new PresetSettings();
+const settingsManager = PresetSettingsManager.getInstance();
 
 // 初期設定を読み込み
-const settings = await presetSettings.load();
+const settings = await settingsManager.load();
 
-// チェックボックスの初期状態を設定
-const checkboxes = document.querySelectorAll<HTMLInputElement>(
-  'input[type="checkbox"][data-preset]',
-);
+// プリセットリストを動的に生成
+const container = document.querySelector(".preset-toggles");
+if (container) {
+  container.innerHTML = "";
 
-for (const checkbox of checkboxes) {
-  const presetKey = checkbox.dataset.preset;
-  if (presetKey) {
-    checkbox.checked = settings[presetKey] ?? true;
-  }
+  Object.values(PRESETS).forEach((presetName) => {
+    const item = document.createElement("div");
+    item.className = "preset-item";
 
-  // 変更イベントリスナーを追加
-  checkbox.addEventListener("change", async () => {
-    const presetKey = checkbox.dataset.preset;
-    if (presetKey) {
-      await presetSettings.set(presetKey, checkbox.checked);
-    }
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = presetName;
+    checkbox.dataset.preset = presetName;
+    checkbox.checked = settings[presetName] ?? true;
+
+    const span = document.createElement("span");
+    span.textContent = PRESET_LABELS[presetName];
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+    item.appendChild(label);
+    container.appendChild(item);
+
+    // 変更イベントリスナーを追加
+    checkbox.addEventListener("change", async () => {
+      await settingsManager.set(presetName, checkbox.checked);
+    });
   });
 }
