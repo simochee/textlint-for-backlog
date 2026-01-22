@@ -1,6 +1,7 @@
 import type { LintResultMessage } from "@/types/textlint";
 import styles from "@/entrypoints/content/style.module.css";
 import { createRangeFromTextOffset } from "./create-range-from-text-offset";
+import { getRuleDocUrl } from "./rule-doc-links";
 
 /**
  * エラーアイコンの表示位置を管理し、要素の位置に追従させるクラス
@@ -343,34 +344,46 @@ export class ErrorIconManager {
       const errorHeader = document.createElement("div");
       errorHeader.className = styles.errorHeader;
 
-      const errorLink = document.createElement("a");
-      errorLink.href = `http://localhost/rules/${error.ruleId}`;
-      errorLink.className = styles.errorRule;
-      errorLink.target = "_blank";
-      errorLink.rel = "noopener noreferrer";
-      errorLink.textContent = error.ruleId;
+      // ルールIDからドキュメントURLを取得
+      const docUrl = getRuleDocUrl(error.ruleId);
 
-      const linkIcon = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "svg",
-      );
-      linkIcon.setAttribute("class", styles.linkIcon);
-      linkIcon.setAttribute("viewBox", "0 0 16 16");
-      linkIcon.setAttribute("fill", "none");
+      if (docUrl) {
+        // ドキュメントURLが存在する場合はリンクを作成
+        const errorLink = document.createElement("a");
+        errorLink.href = docUrl;
+        errorLink.className = styles.errorRule;
+        errorLink.target = "_blank";
+        errorLink.rel = "noopener noreferrer";
+        errorLink.textContent = error.ruleId;
 
-      const path = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-      path.setAttribute("d", "M14 9v5H2V2h5M9 2h5v5M8 8l6-6");
-      path.setAttribute("stroke", "currentColor");
-      path.setAttribute("stroke-width", "1.5");
-      path.setAttribute("stroke-linecap", "round");
-      path.setAttribute("stroke-linejoin", "round");
+        const linkIcon = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg",
+        );
+        linkIcon.setAttribute("class", styles.linkIcon);
+        linkIcon.setAttribute("viewBox", "0 0 16 16");
+        linkIcon.setAttribute("fill", "none");
 
-      linkIcon.appendChild(path);
-      errorLink.appendChild(linkIcon);
-      errorHeader.appendChild(errorLink);
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
+        path.setAttribute("d", "M14 9v5H2V2h5M9 2h5v5M8 8l6-6");
+        path.setAttribute("stroke", "currentColor");
+        path.setAttribute("stroke-width", "1.5");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+
+        linkIcon.appendChild(path);
+        errorLink.appendChild(linkIcon);
+        errorHeader.appendChild(errorLink);
+      } else {
+        // ドキュメントURLが存在しない場合はテキストのみ表示
+        const errorRule = document.createElement("span");
+        errorRule.className = styles.errorRule;
+        errorRule.textContent = error.ruleId;
+        errorHeader.appendChild(errorRule);
+      }
 
       const errorMessage = document.createElement("div");
       errorMessage.className = styles.errorMessage;
